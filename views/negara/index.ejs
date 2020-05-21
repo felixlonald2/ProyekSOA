@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Paaji+2:wght@600&display=swap" rel="stylesheet">
+    <style>
+        .container{
+            width: 100%;
+            height: 5800px;
+        }
+        #judul{
+            font-size: 40px;
+            font-family: 'Baloo Paaji 2', cursive;
+            margin-left: 43%;
+        }
+        #pembatas{
+            width: 80%;
+            height: 2px;
+            background-color: gainsboro;
+            position: absolute;
+            top: 100px;
+            left:10%
+        }
+        #subjudul{
+            font-size: 30px;
+            font-family: 'Baloo Paaji 2', cursive;
+            position: absolute;
+            left: 20%;
+            top: 150px;
+        }
+        #text{
+            width: 60%;
+            font-size: 16px;
+            font-family: monospace;
+            position: absolute;
+            left: 20%;
+            top: 250px;
+            color: grey;
+        }
+        #negara{
+            width: 100px;
+            height: 100px;
+            background-image: url("gambar/ar.svg");
+            border-radius: 5%;
+        }
+        #namanegara{
+            font-size: 26px;
+            font-family: monospace;
+            position: absolute;
+            left: 45%;
+            top: 0px;
+            color: black;
+            font-weight: 500;
+        }
+        #kodenegara{
+            width: 25px;
+            height: 25px;
+            background-color: black;
+            position: absolute;
+            left: 45%;
+            top: 70%;
+            border-radius: 15%;
+            font-size: 16px;
+            font-family: monospace;
+            color: gainsboro;
+            text-align: center;
+        }
+        #boxnegara1{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 350px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara1:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara2{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 350px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara2:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara3{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 550px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara3:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara4{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 550px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara4:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara5{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 750px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara5:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara6{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 750px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara6:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara7{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 950px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara7:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara8{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 950px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara8:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara9{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 1150px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara9:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara10{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 1150px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara10:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara11{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 1350px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara11:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara12{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 1350px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara12:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara13{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 1550px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara13:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara14{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 1550px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara14:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara15{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 1750px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara15:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara16{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 1750px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara16:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara17{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 1950px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara17:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara18{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 1950px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara18:hover {
+            transform: scale(1.1);
+        }#boxnegara19{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 2150px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara19:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara20{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 2150px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara20:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara21{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 2350px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara21:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara22{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 2350px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara22:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara23{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 2550px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara23:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara24{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 2550px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara24:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara25{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 2750px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara25:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara26{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 2750px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara26:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara27{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 2950px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara27:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara28{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 2950px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara28:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara29{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 3150px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara29:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara30{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 3150px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara30:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara31{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 3350px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara31:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara32{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 3350px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara32:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara33{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 3550px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara33:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara34{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 3550px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara34:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara35{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 3750px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara35:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara36{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 3750px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara36:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara37{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 3950px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara37:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara38{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 3950px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara38:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara39{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 4150px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara39:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara40{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 4150px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara40:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara41{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 4350px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara41:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara42{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 4350px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara42:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara43{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 4550px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara43:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara44{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 4550px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara44:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara45{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 4750px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara45:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara46{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 4750px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara46:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara47{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 4950px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara47:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara48{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 4950px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara48:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara49{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 5150px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara49:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara50{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 5150px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara50:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara51{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 5350px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara51:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara52{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 5350px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara52:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara53{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 20%;
+            top: 5550px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara53:hover {
+            transform: scale(1.1);
+        }
+        #boxnegara54{
+            width: 250px;
+            height: 100px;
+            position: absolute;
+            left: 55%;
+            top: 5550px;
+            transition: transform .4s;
+            cursor: pointer;
+        }
+        #boxnegara54:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="judul">News API</div>
+        <div id="pembatas"></div>
+        
+        <div id="subjudul">News Sources</div>
+        
+        <div id="text">We curate a list of top headlines for a range of countries. You can click through for integration examples.</div>
+
+        <div id="boxnegara1" onclick="box1()">
+            <div id="negara" ></div>
+            <div id="namanegara">Argentina</div>
+            <div id="kodenegara">ar</div>
+        </div>   
+
+        <div id="boxnegara2" onclick="box2()">
+            <div id="negara" style="background-image: url('gambar/au.svg');"></div>
+            <div id="namanegara">Australia</div>
+            <div id="kodenegara">au</div>
+        </div>
+
+        <div id="boxnegara3" onclick="box3()">
+            <div id="negara" style="background-image: url('gambar/at.svg');"></div>
+            <div id="namanegara">Austria</div>
+            <div id="kodenegara">at</div>
+        </div>
+
+        <div id="boxnegara4" onclick="box4()">
+            <div id="negara" style="background-image: url('gambar/be.svg');"></div>
+            <div id="namanegara">Belgium</div>
+            <div id="kodenegara">be</div>
+        </div>
+
+        <div id="boxnegara5" onclick="box5()">
+            <div id="negara" style="background-image: url('gambar/br.svg');"></div>
+            <div id="namanegara">Brazil</div>
+            <div id="kodenegara">br</div>
+        </div>
+
+        <div id="boxnegara6" onclick="box6()">
+            <div id="negara" style="background-image: url('gambar/bg.svg');"></div>
+            <div id="namanegara">Bulgaria</div>
+            <div id="kodenegara">bg</div>
+        </div>
+
+        <div id="boxnegara7" onclick="box7()">
+            <div id="negara" style="background-image: url('gambar/ca.svg');"></div>
+            <div id="namanegara">Canada</div>
+            <div id="kodenegara">ca</div>
+        </div>
+
+        <div id="boxnegara8" onclick="box8()">
+            <div id="negara" style="background-image: url('gambar/cn.svg');"></div>
+            <div id="namanegara">China</div>
+            <div id="kodenegara">cn</div>
+        </div>
+
+        <div id="boxnegara9" onclick="box9()">
+            <div id="negara" style="background-image: url('gambar/co.svg');"></div>
+            <div id="namanegara">Colombia</div>
+            <div id="kodenegara">co</div>
+        </div>
+
+        <div id="boxnegara10" onclick="box10()">
+            <div id="negara" style="background-image: url('gambar/cu.svg');"></div>
+            <div id="namanegara">Cuba</div>
+            <div id="kodenegara">cu</div>
+        </div>
+
+        <div id="boxnegara11" onclick="box11()">
+            <div id="negara" style="background-image: url('gambar/cz.svg');"></div>
+            <div id="namanegara">Czech</div>
+            <div id="kodenegara">cz</div>
+        </div>
+
+        <div id="boxnegara12" onclick="box12()">
+            <div id="negara" style="background-image: url('gambar/eg.svg');"></div>
+            <div id="namanegara">Egypt</div>
+            <div id="kodenegara">eg</div>
+        </div>
+
+        <div id="boxnegara13" onclick="box13()">
+            <div id="negara" style="background-image: url('gambar/fr.svg');"></div>
+            <div id="namanegara">France</div>
+            <div id="kodenegara">fr</div>
+        </div>
+
+        <div id="boxnegara14" onclick="box14()">
+            <div id="negara" style="background-image: url('gambar/de.svg');"></div>
+            <div id="namanegara">Germany</div>
+            <div id="kodenegara">de</div>
+        </div>
+
+        <div id="boxnegara15" onclick="box15()">
+            <div id="negara" style="background-image: url('gambar/gr.svg');"></div>
+            <div id="namanegara">Greece</div>
+            <div id="kodenegara">gr</div>
+        </div>
+
+        <div id="boxnegara16" onclick="box16()">
+            <div id="negara" style="background-image: url('gambar/hk.svg');"></div>
+            <div id="namanegara">Hong kong</div>
+            <div id="kodenegara">hk</div>
+        </div>
+
+        <div id="boxnegara17" onclick="box17()">
+            <div id="negara" style="background-image: url('gambar/hu.svg');"></div>
+            <div id="namanegara">Hungary</div>
+            <div id="kodenegara">hu</div>
+        </div>
+
+        <div id="boxnegara18" onclick="box18()">
+            <div id="negara" style="background-image: url('gambar/in.svg');"></div>
+            <div id="namanegara">India</div>
+            <div id="kodenegara">in</div>
+        </div>
+
+        <div id="boxnegara19" onclick="box19()">
+            <div id="negara" style="background-image: url('gambar/id.svg');"></div>
+            <div id="namanegara">Indonesia</div>
+            <div id="kodenegara">id</div>
+        </div>
+
+        <div id="boxnegara20" onclick="box20()">
+            <div id="negara" style="background-image: url('gambar/ie.svg');"></div>
+            <div id="namanegara">Ireland</div>
+            <div id="kodenegara">ie</div>
+        </div>
+
+        <div id="boxnegara21" onclick="box21()">
+            <div id="negara" style="background-image: url('gambar/il.svg');"></div>
+            <div id="namanegara">Israel</div>
+            <div id="kodenegara">il</div>
+        </div>
+
+        <div id="boxnegara22" onclick="box22()">
+            <div id="negara" style="background-image: url('gambar/it.svg');"></div>
+            <div id="namanegara">Italy</div>
+            <div id="kodenegara">it</div>
+        </div>
+
+        <div id="boxnegara23" onclick="box23()">
+            <div id="negara" style="background-image: url('gambar/jp.svg');"></div>
+            <div id="namanegara">Japan</div>
+            <div id="kodenegara">jp</div>
+        </div>
+
+        <div id="boxnegara25" onclick="box24()">
+            <div id="negara" style="background-image: url('gambar/lt.svg');"></div>
+            <div id="namanegara">Lithuania</div>
+            <div id="kodenegara">lt</div>
+        </div>
+
+        <div id="boxnegara24" onclick="box25()">
+            <div id="negara" style="background-image: url('gambar/lv.svg');"></div>
+            <div id="namanegara">Latvia</div>
+            <div id="kodenegara">lv</div>
+        </div>
+
+        <div id="boxnegara26" onclick="box26()">
+            <div id="negara" style="background-image: url('gambar/my.svg');"></div>
+            <div id="namanegara">Malaysia</div>
+            <div id="kodenegara">my</div>
+        </div>
+
+        <div id="boxnegara27" onclick="box27()">
+            <div id="negara" style="background-image: url('gambar/mx.svg');"></div>
+            <div id="namanegara">Mexico</div>
+            <div id="kodenegara">mx</div>
+        </div>
+
+        <div id="boxnegara28" onclick="box28()">
+            <div id="negara" style="background-image: url('gambar/ma.svg');"></div>
+            <div id="namanegara">Morocco</div>
+            <div id="kodenegara">ma</div>
+        </div>
+
+        <div id="boxnegara29" onclick="box29()">
+            <div id="negara" style="background-image: url('gambar/nl.svg');"></div>
+            <div id="namanegara">Netherlands</div>
+            <div id="kodenegara">nl</div>
+        </div>
+
+        <div id="boxnegara30" onclick="box30()">
+            <div id="negara" style="background-image: url('gambar/nz.svg');"></div>
+            <div id="namanegara">New Zealand</div>
+            <div id="kodenegara">nz</div>
+        </div>
+
+        <div id="boxnegara31" onclick="box31()">
+            <div id="negara" style="background-image: url('gambar/ng.svg');"></div>
+            <div id="namanegara">Nigeria</div>
+            <div id="kodenegara">ng</div>
+        </div>
+
+        <div id="boxnegara32" onclick="box32()">
+            <div id="negara" style="background-image: url('gambar/no.svg');"></div>
+            <div id="namanegara">Norway</div>
+            <div id="kodenegara">no</div>
+        </div>
+
+        <div id="boxnegara33" onclick="box33()">
+            <div id="negara" style="background-image: url('gambar/ph.svg');"></div>
+            <div id="namanegara">Philippines</div>
+            <div id="kodenegara">ph</div>
+        </div>
+
+        <div id="boxnegara34" onclick="box34()">
+            <div id="negara" style="background-image: url('gambar/pl.svg');"></div>
+            <div id="namanegara">Poland</div>
+            <div id="kodenegara">pl</div>
+        </div>
+
+        <div id="boxnegara35" onclick="box35()">
+            <div id="negara" style="background-image: url('gambar/pt.svg');"></div>
+            <div id="namanegara">Portugal</div>
+            <div id="kodenegara">pt</div>
+        </div>
+
+        <div id="boxnegara36" onclick="box36()">
+            <div id="negara" style="background-image: url('gambar/ro.svg');"></div>
+            <div id="namanegara">Romania</div>
+            <div id="kodenegara">ro</div>
+        </div>
+
+        <div id="boxnegara37" onclick="box37()">
+            <div id="negara" style="background-image: url('gambar/ru.svg');"></div>
+            <div id="namanegara">Russia</div>
+            <div id="kodenegara">ru</div>
+        </div>
+
+        <div id="boxnegara38" onclick="box38()">
+            <div id="negara" style="background-image: url('gambar/sa.svg');"></div>
+            <div id="namanegara">Saudi Arabia</div>
+            <div id="kodenegara">sa</div>
+        </div>
+
+        <div id="boxnegara39" onclick="box39()">
+            <div id="negara" style="background-image: url('gambar/rs.svg');"></div>
+            <div id="namanegara">Serbia</div>
+            <div id="kodenegara">rs</div>
+        </div>
+
+        <div id="boxnegara40" onclick="box40()">
+            <div id="negara" style="background-image: url('gambar/sg.svg');"></div>
+            <div id="namanegara">Singapore</div>
+            <div id="kodenegara">sg</div>
+        </div>
+
+        <div id="boxnegara41" onclick="box41()">
+            <div id="negara" style="background-image: url('gambar/sk.svg');"></div>
+            <div id="namanegara">Slovakia</div>
+            <div id="kodenegara">sk</div>
+        </div>
+
+        <div id="boxnegara42" onclick="box42()">
+            <div id="negara" style="background-image: url('gambar/si.svg');"></div>
+            <div id="namanegara">Slovenia</div>
+            <div id="kodenegara">si</div>
+        </div>
+
+        <div id="boxnegara43" onclick="box43()">
+            <div id="negara" style="background-image: url('gambar/za.svg');"></div>
+            <div id="namanegara">South Africa</div>
+            <div id="kodenegara">za</div>
+        </div>
+
+        <div id="boxnegara44" onclick="box44()">
+            <div id="negara" style="background-image: url('gambar/kr.svg');"></div>
+            <div id="namanegara">South Korea</div>
+            <div id="kodenegara">kr</div>
+        </div>
+
+        <div id="boxnegara45" onclick="box45()">
+            <div id="negara" style="background-image: url('gambar/se.svg');"></div>
+            <div id="namanegara">Sweden</div>
+            <div id="kodenegara">se</div>
+        </div>
+
+        <div id="boxnegara46" onclick="box46()">
+            <div id="negara" style="background-image: url('gambar/ch.svg');"></div>
+            <div id="namanegara">Switzerland</div>
+            <div id="kodenegara">ch</div>
+        </div>
+
+        <div id="boxnegara47" onclick="box47()">
+            <div id="negara" style="background-image: url('gambar/tw.svg');"></div>
+            <div id="namanegara">Taiwan</div>
+            <div id="kodenegara">tw</div>
+        </div>
+
+        <div id="boxnegara48" onclick="box48()">
+            <div id="negara" style="background-image: url('gambar/th.svg');"></div>
+            <div id="namanegara">Thailand</div>
+            <div id="kodenegara">th</div>
+        </div>
+
+        <div id="boxnegara49" onclick="box49()">
+            <div id="negara" style="background-image: url('gambar/tr.svg');"></div>
+            <div id="namanegara">Turkey</div>
+            <div id="kodenegara">tr</div>
+        </div>
+
+        <div id="boxnegara50" onclick="box50()">
+            <div id="negara" style="background-image: url('gambar/ae.svg');"></div>
+            <div id="namanegara">UAE</div>
+            <div id="kodenegara">ae</div>
+        </div>
+
+        <div id="boxnegara51" onclick="box51()">
+            <div id="negara" style="background-image: url('gambar/ua.svg');"></div>
+            <div id="namanegara">Ukraine</div>
+            <div id="kodenegara">ua</div>
+        </div>
+
+        <div id="boxnegara52" onclick="box52()">
+            <div id="negara" style="background-image: url('gambar/gb.svg');"></div>
+            <div id="namanegara">United Kingdom</div>
+            <div id="kodenegara">gb</div>
+        </div>
+
+        <div id="boxnegara53" onclick="box53()">
+            <div id="negara" style="background-image: url('gambar/us.svg');"></div>
+            <div id="namanegara">United States</div>
+            <div id="kodenegara">us</div>
+        </div>
+
+        <div id="boxnegara54" onclick="box54()">
+            <div id="negara" style="background-image: url('gambar/ve.svg');"></div>
+            <div id="namanegara">Venuzuela</div>
+            <div id="kodenegara">ve</div>
+        </div>
+        
+    </div>
+</body>
+</html>
+
+<script src="jquery-3.2.1.min.js" type="text/javascript"></script>
+<script>
+    function box1(){
+        var kode="ar"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box2(){
+        var kode="au"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box3(){
+        var kode="at"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box4(){
+        var kode="be"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box5(){
+        var kode="br"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box6(){
+        var kode="bg"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box7(){
+        var kode="ca"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box8(){
+        var kode="cn"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box9(){
+        var kode="co"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box10(){
+        var kode="cu"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box11(){
+        var kode="cz"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box12(){
+        var kode="eg"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box13(){
+        var kode="fr"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box14(){
+        var kode="de"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box15(){
+        var kode="gr"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box16(){
+        var kode="hk"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box17(){
+        var kode="hu"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box18(){
+        var kode="in"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box19(){
+        var kode="id"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box20(){
+        var kode="ie"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box21(){
+        var kode="il"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box22(){
+        var kode="it"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box23(){
+        var kode="jp"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box24(){
+        var kode="lv"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box25(){
+        var kode="lt"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box26(){
+        var kode="my"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box27(){
+        var kode="mx"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box28(){
+        var kode="ma"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box29(){
+        var kode="nl"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box30(){
+        var kode="nz"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box31(){
+        var kode="ng"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box32(){
+        var kode="no"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box33(){
+        var kode="ph"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box34(){
+        var kode="pl"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box35(){
+        var kode="pt"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box36(){
+        var kode="ro"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box37(){
+        var kode="ru"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box38(){
+        var kode="sa"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box39(){
+        var kode="rs"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box40(){
+        var kode="sg"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box41(){
+        var kode="sk"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box42(){
+        var kode="si"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box43(){
+        var kode="za"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box44(){
+        var kode="kr"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box45(){
+        var kode="se"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box46(){
+        var kode="ch"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box47(){
+        var kode="tw"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box48(){
+        var kode="th"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box49(){
+        var kode="tr"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box50(){
+        var kode="ae"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box51(){
+        var kode="ua"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box52(){
+        var kode="gb"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box53(){
+        var kode="us"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+    function box54(){
+        var kode="ve"
+        window.location.href = `http://localhost:3000/api/portal/${kode}`;
+    }
+</script>
