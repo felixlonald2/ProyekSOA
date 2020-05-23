@@ -21,7 +21,8 @@ app.use(function(req, res, next) {
   });
 
 app.get('/',function(req, res){
-    res.render("negara/index");
+    // res.render("negara/index");
+    res.send("asd")
 });
 
 app.get('/api/portal/:kode',async function(req, res){
@@ -65,4 +66,5 @@ app.post('/api/detail',async function(req, res){
     
 }); 
 
-app.listen(3000||process.env.port);
+app.listen(3000||process.env.PORT);
+
