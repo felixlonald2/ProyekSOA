@@ -2,7 +2,8 @@ const express = require('express'),
       app = express(),
       port = process.env.port || 3000,
       bodyParser = require('body-parser'),
-      fetch = require('node-fetch')
+      fetch = require('node-fetch'),
+      db = require('./database');
 
 const request= require('request');
 
@@ -19,9 +20,15 @@ app.use(express.static('public'));
 //     next();
 //   });
 
-app.get('/',function(req, res){
-    // res.render("negara/index");
-    res.send("asd")
+app.get('/', async (req, res) => {
+    let query= await db.executeQuery(`
+        select * from users
+    `);
+
+    return res.status(200).json({
+        status: 200,
+        user: query.rows
+    });
 });
 
 // app.get('/api/portal/:kode',async function(req, res){
