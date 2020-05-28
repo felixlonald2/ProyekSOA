@@ -135,6 +135,83 @@ app.post('/api/pembayaran',async function(req, res){
     }
     
 });
+app.post('/api/registerUser', async (req, res) => {
+    var username = req.body.username;
+    var password = req.body.password;
+    var nama = req.body.nama;
+
+    let query= await db.executeQuery(`select * from users where username= '${username}'`);
+    if(query.length <= 0){
+        if(username != "" && password != "" && nama != ""){
+            let query= await db.executeQuery(`insert into users values('${username}','${password}','${nama}','0','0','50')`);
+            return res.status(200).json({
+                status: 200,
+                message: 'Berhasil Register User'
+            });
+        }
+        else{
+            return res.status(400).json({
+                status: 400,
+                message: 'Field Tidak Boleh ada yang kosong'
+            });
+        }
+    }
+    else{
+        return res.status(400).json({
+            status: 400,
+            message: 'Username sudah terpakai!'
+        });
+    }
+});
+
+app.post('/api/loginUser', async (req, res) => {
+    var username = req.body.username;
+    var password = req.body.password;
+
+    let query= await db.executeQuery(`select * from users where username= '${username}' and password = '${password}' `);
+    if(query.length > 0){
+        return res.status(200).json({
+            status: 200,
+            message: 'Berhasil Login'
+        });
+    }
+    else{
+        return res.status(400).json({
+            status: 400,
+            message: 'Username/Password tidak sesuai!'
+        });
+    }
+});
+
+app.get('/api/getHeadlines/:country',async (req,res)=>{
+    var country = req.params.country;
+    var options ={
+      'method' : 'GET',
+      'url' : 'https://newsapi.org/v2/top-headlines?country='+country+'&apiKey=dc49dba7bedd4a40afdad7b3638dc843'
+    };
+    request(options, function(error,response){
+      if(error) throw new Error(error);
+      var tmp = JSON.parse(response.body);
+      console.log(tmp.articles);
+      res.status(200).send(tmp.articles);
+    });
+});
+
+app.get('/api/getHeadlines/:country/:category',async (req,res)=>{
+    var country = req.params.country;
+    var category = req.params.category;
+    var options ={
+      'method' : 'GET',
+      'url' : 'https://newsapi.org/v2/top-headlines?country='+country+'&category='+ category +'&apiKey=dc49dba7bedd4a40afdad7b3638dc843'
+    };
+    request(options, function(error,response){
+      if(error) throw new Error(error);
+      var tmp = JSON.parse(response.body);
+      console.log(tmp.articles);
+      res.status(200).send(tmp.articles);
+    });
+});
+
 // app.get('/api/portal/:kode',async function(req, res){
 //     const result = await fetch(`
 //     http://newsapi.org/v2/top-headlines?country=${req.params.kode}&apiKey=d6fb52f26bd34ab48dc3416445d12a1a
