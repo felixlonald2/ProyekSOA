@@ -30,7 +30,111 @@ app.get('/', async (req, res) => {
         user: query.rows
     });
 });
+app.get('/tab',async function(req, res){
+    let query= await db.executeQuery(`
+        select * from delaytopup
+    `);
 
+    return res.status(200).json({
+        status: 200,
+        user: query.rows
+    });
+});
+app.post('/api/del',async function(req, res){
+    let query= await db.executeQuery(`
+        delete from delaytopup where kodetopup like '%T%'`
+    );
+    console.log("BERHASIL")
+});
+app.post('/api/topup',async function(req, res){
+    var username = req.body.username;
+    var password = req.body.password;
+    var nominal = req.body.nominal;
+    let query= await db.executeQuery(`
+        select count(*) from users where username='${username}' and password='${password}'`
+    );
+    var jumlah = query.rows[0].count;
+    if(jumlah > 0){
+        let q1= await db.executeQuery(`
+            select count(*) from delaytopup
+        `);
+        var kode = "";
+        var jumcode=q1.rows[0].count;
+        jumcode++;
+        if(jumcode >= 0 && jumcode < 10){
+            kode = "TU00"+jumcode;
+            console.log(kode);
+        }else if(jumcode >= 10 && jumcode < 100){
+            kode = "TU0"+jumcode;
+            console.log(kode);
+        }else{
+            kode = "TU"+jumcode;
+            console.log(kode);
+        }
+        let q2= await db.executeQuery(`
+                insert into delaytopup values ('${kode}','${nominal}')
+        `);
+        return res.status(200).json({
+            status: 200,
+            username : username,
+            kode_top_up : kode,
+            nominal_top_up  : nominal
+        });
+         
+    }
+});
+app.post('/api/pembayaran',async function(req, res){
+    var username = req.body.username;
+    var password = req.body.password;
+    var kode = req.body.kodetopup;
+    let datauser= await db.executeQuery(`
+        select count(*) from users where username='${username}' and password='${password}'
+    `);
+    var adauser = datauser.rows[0].count;
+    if(adauser<=0){
+        console.log("TIDAK DITEMUKAN USER");
+        return res.status(200).send("USER TIDAK DITEMUKAN")
+    }else if (adauser > 0 ){
+        console.log("USER DITEMUKAN MEMULAI PROSES CEK KODE")
+        let datatopup= await db.executeQuery(`
+            select count(*) from delaytopup where kodetopup='${kode}'
+        `);
+        var adatagihan = datatopup.rows[0].count;
+        if(adatagihan<=0){
+            console.log("TIDAK DITEMUKAN TAGIHAN");
+            return res.status(200).send("TAGIHAN TIDAK DITEMUKAN")
+        }else{
+            console.log("KODE DITEMUKAN MEMULAI PROSES PEMBAYARAN")
+            let datasaldo= await db.executeQuery(`
+                select * from users where username='${username}' and password='${password}'
+            `);
+            var saldo = datasaldo.rows[0].saldo;
+            let datanominal= await db.executeQuery(`
+                select * from delaytopup where kodetopup='${kode}'
+            `);
+            var nominal = datanominal.rows[0].nominal;
+            console.log(nominal);
+            saldo+=nominal;    
+            let qq= await db.executeQuery(`
+                update users set saldo='${saldo}' where username='${username}' and password='${password}'
+            `);
+            let dataupdate= await db.executeQuery(`
+                select * from users where username='${username}' and password='${password}'
+            `);
+            console.log("SALDO TELAH TERISI SEBANYAK "+nominal);
+            console.log("SALDO ANDA SEKARANG "+saldo);
+            let query= await db.executeQuery(`
+                delete from delaytopup where kodetopup='${kode}'`
+            );
+            return res.status(200).json({
+                status: 200,
+                user: dataupdate.rows
+            }); 
+            
+        }
+    }
+    
+});
 // app.get('/api/portal/:kode',async function(req, res){
 //     const result = await fetch(`
 //     http://newsapi.org/v2/top-headlines?country=${req.params.kode}&apiKey=d6fb52f26bd34ab48dc3416445d12a1a
@@ -73,4 +177,5 @@ app.get('/', async (req, res) => {
 // }); 
 
 app.listen(3000||process.env.PORT);
+console.log("Listening port 3000....")
 
