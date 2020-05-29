@@ -6,7 +6,7 @@ const express = require('express'),
       db = require('./database');
 
 const request= require('request');
-
+const jwt = require('jsonwebtoken');
 // app.set("view engine","ejs");
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -167,12 +167,18 @@ app.post('/api/registerUser', async (req, res) => {
 app.post('/api/loginUser', async (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
+    var status;
 
-    let query= await db.executeQuery(`select * from users where username= '${username}' and password = '${password}' `);
+    let query= await db.executeQuery(`select * from users where username = '${username}' and password='${password}'`);
     if(query.length > 0){
+        status = query[0].status;
+        const token = jwt.sign({    
+            "username":username,
+            "status":status
+        }   ,"217116592",{ expiresIn: 86400});
         return res.status(200).json({
             status: 200,
-            message: 'Berhasil Login'
+            message: query[0].password
         });
     }
     else{
