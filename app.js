@@ -189,18 +189,16 @@ app.post('/api/loginUser', async (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
     var status;
-
-    let query= await db.executeQuery(`select * from users where username = '${username}' and password='${password}'`);
-    if(query.length > 0){
-        status = query[0].status;
+    let query= await db.executeQuery(`select count(*) from users where username = '${username}' and password='${password}'`);
+    if(query.rows[0].count > 0){
+        let query1= await db.executeQuery(`select * from users where username = '${username}' and password='${password}'`);
+        status = query1.rows[0].status;
+        console.log(status)
         const token = jwt.sign({    
             "username":username,
             "status":status
-        }   ,"217116592",{ expiresIn: 86400});
-        return res.status(200).json({
-            status: 200,
-            message: query[0].password
-        });
+        }   ,"proyeksoa",{ expiresIn: 86400});
+        return res.status(200).send(token);
     }
     else{
         return res.status(400).json({
