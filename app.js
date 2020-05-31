@@ -23,6 +23,7 @@ app.get('/', async (req, res) => {
         user: query.rows
     });
 });
+
 app.post('/api/topup',async function(req, res){
     var username = req.body.username;
     var password = req.body.password;
@@ -81,6 +82,7 @@ app.post('/api/topup',async function(req, res){
     }
     
 });
+
 app.post('/api/pembayaran',async function(req, res){
     var username = req.body.username;
     var password = req.body.password;
@@ -140,21 +142,19 @@ app.post('/api/pembayaran',async function(req, res){
                         status: 200,
                         user: dataupdate.rows
                     }); 
-                    
                 }
             }            
         }
     }
-    
-    
 });
+
 app.post('/api/registerUser', async (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
     var nama = req.body.nama;
 
     let query= await db.executeQuery(`select * from users where username= '${username}'`);
-    if(query.length <= 0){
+    if(query.rows.length <= 0){
         if(username != "" && password != "" && nama != ""){
             let query= await db.executeQuery(`insert into users values('${username}','${password}','${nama}','0','0','50')`);
             return res.status(200).json({
@@ -228,6 +228,121 @@ app.get('/api/getHeadlines/:country/:category',async (req,res)=>{
       res.status(200).send(tmp.articles);
     });
 });
+
+app.post('/api/addApiHit', async (req, res) => {
+    var apihit = parseInt(req.body.apihit);
+    const token = req.header("x-auth-token");
+
+    let user = {};
+    if(!token){
+        res.status(401).send("Token not found");
+    }
+    try{
+        user = jwt.verify(token,"proyeksoa");
+    }catch(err){
+        res.status(401).send("Token Invalid");
+    }
+    if((new Date().getTime()/1000)-user.iat>3*86400){
+        return res.status(400).send("Token expired");
+    }
+    else{
+        if(!parseInt(apihit)){
+            return res.status(400).json({
+                status: 400,
+                message: 'Apihit tidak boleh kosong!'
+            });
+        }
+        else{
+            let username = user.username;
+            let total = apihit*500;
+
+            let query= await db.executeQuery(`
+                select saldo from users where username = '${username}'
+            `);
+
+            let saldosekarang = query.rows[0].saldo-total;
+
+            if(query.rows[0].saldo-total>=0){
+                let query= await db.executeQuery(`
+                    select api_hit from users where username = '${username}'
+                `);
+
+                let apihittotal = query.rows[0].api_hit+apihit;
+                
+                let query2= await db.executeQuery(`
+                    update users set saldo='${saldosekarang}', api_hit = '${apihittotal}' where username = '${username}'
+                `);
+
+                return res.status(200).json({
+                    status: 200,
+                    message: 'Api Hit berhasil ditambahkan sebesar '+apihit+', Saldo anda terpotong sebesar Rp.'+total
+                });
+            }
+            else{
+                return res.status(400).json({
+                    status: 400,
+                    message: 'Saldo anda tidak cukup, Saldo anda : Rp.'+query.rows[0].saldo+', Harga ApiHit yang harus dibayar adalah Rp.'+total
+                });
+            }
+        }
+    }
+});
+
+app.post('/api/subscription', async (req, res) => {
+    const token = req.header("x-auth-token");
+
+    let user = {};
+    if(!token){
+        res.status(401).send("Token not found");
+    }
+    try{
+        user = jwt.verify(token,"proyeksoa");
+    }catch(err){
+        res.status(401).send("Token Invalid");
+    }
+    if((new Date().getTime()/1000)-user.iat>3*86400){
+        return res.status(400).send("Token expired");
+    }
+    if(user.status==1){ 
+        return res.status(400).send("Anda sudah menjadi author, tidak bisa subscribe lagi!")
+    }
+    else{
+        let username = user.username;
+        let query= await db.executeQuery(`
+            select * from users where username = '${username}'
+        `);
+
+        if(query.rows[0].status==1){
+            return res.status(400).send("Anda sudah menjadi author, tidak bisa subscribe lagi!")
+        }
+        else{
+            let query= await db.executeQuery(`
+                select saldo from users where username = '${username}'
+            `);
+    
+            let saldosekarang = query.rows[0].saldo-150000;
+    
+            if(query.rows[0].saldo-150000>=0){
+                let query= await db.executeQuery(`
+                    update users set status=1, saldo=${saldosekarang} where username = '${username}'
+                `);
+    
+                return res.status(200).json({
+                    status: 200,
+                    message: 'Anda berhasil subscribe dan menjadi author, anda dapat membuat berita baru!'
+                });
+            }
+            else{
+                return res.status(400).json({
+                    status: 400,
+                    message: 'Saldo anda tidak cukup, Saldo anda : Rp.'+query.rows[0].saldo+', Untuk subscribe anda harus membayar Rp.200000'
+                });
+            }
+        }
+    }
+});
+
+
 
 app.listen(3000,function(){
     console.log("Listening port 3000....")
