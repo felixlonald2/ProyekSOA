@@ -419,6 +419,7 @@ app.post('/api/comment', async (req, res) => {
     var title = req.body.title;
     var isi = req.body.isiberita;
     const token = req.header("x-auth-token");
+    var apihit;
     let user = {};
     if(!token){
         res.status(401).send("Token not found");
@@ -445,11 +446,30 @@ app.post('/api/comment', async (req, res) => {
                 try{
                     let qq= await db.executeQuery(`
                         insert into comment values('${title}','${isi}','${username}')
-                    `);
-                    console.log("COMMENT BERHASIL DI INSERT")
-                    res.status(401).send("COMMENT BERHASIL");
+                    `);               
+                    let cekapihit= await db.executeQuery(`
+                        select * from users where username='${username}'`
+                    );
+                    apihit = cekapihit.rows[0].api_hit;
+                    if(apihit<=0){
+                        return res.status(400).send("API HIT TIDAK CUKUP")
+                    }else{
+                        apihit--;
+                        let qapi= await db.executeQuery(`
+                                update users set api_hit='${apihit}' where username='${username}'
+                        `);
+                        return res.status(200).json({
+                            status: 200,
+                            username: username,
+                            api_hit_sisa: apihit,
+                            title_berita : title,
+                            isi_berita : isi,
+                            message : "COMMENT BERHASIL"
+                        }); 
+                    }
+                    
                 }catch(err){
-                    res.status(401).send("GAGAL INSERT");
+                    res.status(401).send("COMMENT GAGAL");
                 }             
             }
             
