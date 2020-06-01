@@ -231,31 +231,59 @@ app.post('/api/loginUser', async (req, res) => {
 
 app.get('/api/getHeadlines/:country',async (req,res)=>{
     var country = req.params.country;
-    var options ={
-      'method' : 'GET',
-      'url' : 'https://newsapi.org/v2/top-headlines?country='+country+'&apiKey=dc49dba7bedd4a40afdad7b3638dc843'
-    };
-    request(options, function(error,response){
-      if(error) throw new Error(error);
-      var tmp = JSON.parse(response.body);
-      console.log(tmp.articles);
-      res.status(200).send(tmp.articles);
-    });
+    const token = req.header("x-auth-token");
+    let user = {};
+    if(!token){
+        res.status(401).send("Token not found");
+    }
+    try{
+        user = jwt.verify(token,"proyeksoa");
+    }catch(err){
+        res.status(401).send("Token Invalid");
+    }
+    if((new Date().getTime()/1000)-user.iat>3*86400){
+        return res.status(400).send("Token expired");
+    }else{
+        var options ={
+            'method' : 'GET',
+            'url' : 'https://newsapi.org/v2/top-headlines?country='+country+'&apiKey=dc49dba7bedd4a40afdad7b3638dc843'
+        };
+        request(options, function(error,response){
+            if(error) throw new Error(error);
+            var tmp = JSON.parse(response.body);
+            console.log(tmp.articles);
+            res.status(200).send(tmp.articles);
+        });
+    }
 });
 
 app.get('/api/getHeadlines/:country/:category',async (req,res)=>{
     var country = req.params.country;
     var category = req.params.category;
-    var options ={
-      'method' : 'GET',
-      'url' : 'https://newsapi.org/v2/top-headlines?country='+country+'&category='+ category +'&apiKey=dc49dba7bedd4a40afdad7b3638dc843'
-    };
-    request(options, function(error,response){
-      if(error) throw new Error(error);
-      var tmp = JSON.parse(response.body);
-      console.log(tmp.articles);
-      res.status(200).send(tmp.articles);
-    });
+    const token = req.header("x-auth-token");
+    let user = {};
+    if(!token){
+        res.status(401).send("Token not found");
+    }
+    try{
+        user = jwt.verify(token,"proyeksoa");
+    }catch(err){
+        res.status(401).send("Token Invalid");
+    }
+    if((new Date().getTime()/1000)-user.iat>3*86400){
+        return res.status(400).send("Token expired");
+    }else{
+        var options ={
+            'method' : 'GET',
+            'url' : 'https://newsapi.org/v2/top-headlines?country='+country+'&category='+ category +'&apiKey=dc49dba7bedd4a40afdad7b3638dc843'
+        };
+          request(options, function(error,response){
+            if(error) throw new Error(error);
+            var tmp = JSON.parse(response.body);
+            console.log(tmp.articles);
+            res.status(200).send(tmp.articles);
+        });
+    }
 });
 
 app.post('/api/addApiHit', async (req, res) => {
