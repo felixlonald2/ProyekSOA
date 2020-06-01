@@ -4,7 +4,6 @@ const express = require('express'),
       bodyParser = require('body-parser'),
       fetch = require('node-fetch'),
       db = require('./database');
-const jwt_decode = require('jwt-decode');//npm install jwt-decode --save
 const request= require('request');
 const jwt = require('jsonwebtoken');
 
@@ -432,8 +431,7 @@ app.post('/api/comment', async (req, res) => {
     if((new Date().getTime()/1000)-user.iat>3*86400){
         return res.status(400).send("Token expired");
     }else{
-        var jwtdecode = jwt_decode(token);
-        var username = jwtdecode.username;
+        var username = user.username;
         if(isi==""||title==""){
             return res.status(400).send("FIELD TIDAK BOLEH KOSONG")
         }else{
