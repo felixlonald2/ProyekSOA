@@ -1,6 +1,5 @@
 const express = require('express'),
       app = express(),
-      port = process.env.port || 3000,
       bodyParser = require('body-parser'),
       fetch = require('node-fetch'),
       db = require('./database');
@@ -505,6 +504,6 @@ app.post('/api/comment', async (req, res) => {
     }
 });
 
-app.listen(3000,function(){
+app.listen(process.env.port,function(){
     console.log("Listening port 3000....")
 });
