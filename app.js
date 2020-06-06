@@ -9,6 +9,21 @@ const jwt = require('jsonwebtoken');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+    destination: function(req,file,callback){
+        callback(null,"./public/uploads");
+    },
+    filename : function(req,file,callback){
+        const filename = file.originalname.split(".");
+        const extension = filename[1];
+        callback(null,Date.now()+"."+extension);
+    }
+});
+const uploads = multer({
+    storage: storage
+});
 
 app.get('/', async (req, res) => {
     console.log("CHECK USER....")
@@ -504,6 +519,222 @@ app.post('/api/comment', async (req, res) => {
     }
 });
 
-app.listen(process.env.port,function(){
-    console.log("Listening port 3000....")
+app.post('/api/insertNews', uploads.single("gambar"), async (req, res) => {
+    var judul = req.body.judul;
+    var deskripsi = req.body.deskripsi;
+    var isi = req.body.isi;
+    var tanggal = new Date().toISOString();
+    var id_negara = req.body.id_negara;
+    const token = req.header("x-auth-token");
+
+    let user = {};
+    if(!token){
+        res.status(401).send("Token not found");
+    }
+    try{
+        user = jwt.verify(token,"proyeksoa");
+    }catch(err){
+        res.status(401).send("Token Invalid");
+    }
+    if((new Date().getTime()/1000)-user.iat>3*86400){
+        return res.status(400).send("Token expired");
+    }
+
+    if(user.status==1){ 
+        let query= await db.executeQuery(`select * from berita where judul= '${judul}'`);
+        let query1= await db.executeQuery(`select id from berita order by 1 desc`);
+        let author = user.username;
+        if(query.rows.length <= 0){
+            if(author != "" && judul != "" && deskripsi != "" && isi != "" && id_negara != ""){
+                var id_news = query1.rows[0].id +1
+                let query= await db.executeQuery(`insert into berita values('${id_news}','${author}','${judul}','${deskripsi}','${isi}','${tanggal}','public/uploads/${req.file.filename}','${id_negara}')`);
+                return res.status(200).json({
+                    status: 200,
+                    message: 'Berhasil Insert Berita'
+                });
+            }
+            else{
+                return res.status(400).json({
+                    status: 400,
+                    message: 'Field Tidak Boleh ada yang kosong'
+                });
+            }
+        }
+        else{
+            return res.status(400).json({
+                status: 400,
+                message: 'Berita sudah ada!'
+            });
+        }
+    }
+    else{
+        return res.status(404).json({
+            status: 400,
+            message: 'Bukan Author!'
+        });
+    }
+    
+});
+
+app.get('/api/getAuthorNews', async (req, res) => {
+    const token = req.header("x-auth-token");
+
+    let user = {};
+    if(!token){
+        res.status(401).send("Token not found");
+    }
+    try{
+        user = jwt.verify(token,"proyeksoa");
+    }catch(err){
+        res.status(401).send("Token Invalid");
+    }
+    if((new Date().getTime()/1000)-user.iat>3*86400){
+        return res.status(400).send("Token expired");
+    }
+
+    let author = user.username;
+    if(user.status==1){ 
+        let query= await db.executeQuery(`select * from berita where author= '${author}'`);
+        if(query.rows.length<=0){
+            return res.status(404).json({
+                status: 400,
+                message: 'Tidak mempunyai berita !'
+            });
+        }
+        else{
+            return res.status(200).json({
+                status: 200,
+                berita: query.rows
+            });
+        }
+    }
+    else{
+        return res.status(404).json({
+            status: 400,
+            message: 'Bukan Author!'
+        });
+    }
+});
+
+app.delete('/api/deleteNews', async (req, res) => {
+    var id_news = req.body.id_news;
+    const token = req.header("x-auth-token");
+
+    let user = {};
+    if(!token){
+        res.status(401).send("Token not found");
+    }
+    try{
+        user = jwt.verify(token,"proyeksoa");
+    }catch(err){
+        res.status(401).send("Token Invalid");
+    }
+    if((new Date().getTime()/1000)-user.iat>3*86400){
+        return res.status(400).send("Token expired");
+    }
+
+    let author = user.username;
+    if(id_news != undefined){
+        if(user.status==1){ 
+            let query= await db.executeQuery(`select * from berita where author='${author}' and id=${id_news}`);
+            if(query.rows.length<=0){
+                return res.status(404).json({
+                    status: 404,
+                    message: 'Berita tidak ditemukan !'
+                });
+            }
+            else{
+                let query1= await db.executeQuery(`delete from berita where author='${author}' and id=${id_news}`);
+                return res.status(200).json({
+                    status: 200,
+                    message: 'Berhasil delete berita !'
+                });
+            }
+        }
+        else{
+            return res.status(404).json({
+                status: 400,
+                message: 'Bukan Author!'
+            });
+        }
+    }
+    else{
+        return res.status(404).json({
+            status: 400,
+            message: 'Field tidak boleh kosong!'
+        });
+    }
+    
+});
+
+app.put('/api/updateNews', uploads.single("gambar"), async (req, res) => {
+    var id_news = req.body.id_news;
+    var judul = req.body.judul;
+    var deskripsi = req.body.deskripsi;
+    var isi = req.body.isi;
+    var tanggal = Date.now();
+    var id_negara = req.body.id_negara;
+    
+    const token = req.header("x-auth-token");
+
+    let user = {};
+    if(!token){
+        res.status(401).send("Token not found");
+    }
+    try{
+        user = jwt.verify(token,"proyeksoa");
+    }catch(err){
+        res.status(401).send("Token Invalid");
+    }
+    if((new Date().getTime()/1000)-user.iat>3*86400){
+        return res.status(400).send("Token expired");
+    }
+
+    let author = user.username;
+    if(id_news != "" && author != "" && judul != "" && deskripsi != "" && isi != "" && id_negara != ""){
+        if(user.status==1){ 
+            let query= await db.executeQuery(`select * from berita where author= '${author}' and id=${id_news}`);
+            if(query.rows.length<=0){
+                return res.status(404).json({
+                    status: 404,
+                    message: 'Berita tidak ditemukan !'
+                });
+            }
+            else{
+                let query1= await db.executeQuery(`update berita set author='${author}',judul='${judul}',deskripsi='${deskripsi}',isi='${isi}',tanggal=to_timestamp(${Date.now()} / 1000.0),foto='public/uploads/${req.file.filename}',id_negara='${id_negara}' where id=${id_news}`);
+                return res.status(200).json({
+                    status: 200,
+                    message: 'Berhasil update berita !'
+                });
+            }
+        }
+        else{
+            return res.status(404).json({
+                status: 400,
+                message: 'Bukan Author!'
+            });
+        }
+    }
+    else{
+        return res.status(404).json({
+            status: 400,
+            message: 'Field tidak boleh kosong!'
+        });
+    }
+    
+});
+
+app.get('/api/getNews', async (req, res) => {
+    let query= await db.executeQuery(`
+        select * from berita
+    `);
+    return res.status(200).json({
+        status: 200,
+        berita: query.rows
+    });
+});
+
+
+app.listen(3000,function(){
+    console.log("Listening port 3000....");
 });
