@@ -634,7 +634,7 @@ app.delete('/api/deleteNews', async (req, res) => {
     }
 
     let author = user.username;
-    if(id_news != undefined){
+    if(id_news != ""{
         if(user.status==1){ 
             let query= await db.executeQuery(`select * from berita where author='${author}' and id=${id_news}`);
             if(query.rows.length<=0){
