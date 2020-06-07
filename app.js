@@ -1,6 +1,7 @@
 const express = require('express'),
       app = express(),
       bodyParser = require('body-parser'),
+      port = 3000,
       fetch = require('node-fetch'),
       db = require('./database');
 const request= require('request');
@@ -735,6 +736,6 @@ app.get('/api/getNews', async (req, res) => {
 });
 
 
-app.listen(3000,function(){
+app.listen(process.env.port,function(){
     console.log("Listening port 3000....");
 });
