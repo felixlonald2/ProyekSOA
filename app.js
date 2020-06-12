@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
 const uploads = multer({
     storage: storage
 });
-
+let tampungancomment={}
 app.get('/', async (req, res) => {
     console.log("CHECK USER....")
     let query= await db.executeQuery(`
@@ -454,9 +454,10 @@ app.post('/api/subscription', async (req, res) => {
     }
 });
 
-app.get('/api/getcomment', async (req, res) => {
-    var title = req.body.title;
+app.get('/api/getcomment/:id_title', async (req, res) => {
+    var idtitle = req.params.id_title;
     const token = req.header("x-auth-token");
+    let tampungan;
     let user = {};
     if(!token){
         return res.status(404).json({
@@ -478,14 +479,14 @@ app.get('/api/getcomment', async (req, res) => {
             message: "TOKEN EXPIRED"
         }); 
     }else{
-        if(title==""){
+        if(idtitle==""){
             return res.status(400).json({
                 status: 400,
                 message: "FIELD TIDAK BOLEH KOSONG"
             }); 
         }else{
             let query= await db.executeQuery(`
-                select count(*) from comment where title_berita='${title}'`
+                select count(*) from title where id='${idtitle}'`
             );
             var jumlah = query.rows[0].count;
             console.log("CHECKING TITLE....")
@@ -499,11 +500,11 @@ app.get('/api/getcomment', async (req, res) => {
                 console.log("TITLE DITEMUKAN")
                 console.log("MENAMPILKAN COMMENT....")
                 let qq= await db.executeQuery(`
-                    select * from comment where title_berita='${title}'`
+                    select * from comment where id_title='${idtitle}'`
                 );
                 res.status(200).json({
                     status: 200,
-                    Title : title,
+                    berita  : tampungancomment,
                     comment  : qq.rows
                 });
                 console.log("COMMENT TELAH DITAMPILKAN DI POSTMAN")
@@ -513,11 +514,13 @@ app.get('/api/getcomment', async (req, res) => {
     }
 });
 
-app.post('/api/comment', async (req, res) => {
-    var title = req.body.title;
-    var isi = req.body.isiberita;
+app.post('/api/comment/:titleberita', async (req, res) => {
+    var title = req.params.titleberita;
+    var komen = req.body.comment;
     const token = req.header("x-auth-token");
     var apihit;
+    let isikomentar={};
+    let tampunganberita={};
     let user = {};
     if(!token){
         return res.status(404).json({
@@ -540,26 +543,30 @@ app.post('/api/comment', async (req, res) => {
         }); 
     }else{
         var username = user.username;
-        if(isi==""||title==""){
+        if(komen==""||title==""){
             return res.status(400).json({
                 status: 400,
                 message: "FIELD TIDAK BOLEH KOSONG"
             }); 
-        }else{
+        }else{                     
             let query= await db.executeQuery(`
-                select count(*) from comment where title_berita='${title}'`
+                select count(*) from title where title='${title}'`
             );
             var jumlah = query.rows[0].count;
             if(jumlah <= 0){
                 return res.status(404).json({
                     status: 404,
-                    message: "TITLE BERITA TIDAK DITEMUKAN"
+                    message: "TITLE BERITA NOT FOUND",
+                    WARNING1: "COBALAH MENGGUNAKAN TITLE LENGKAP",
+                    WARNING2 : "TITLE LENGKAP YANG DIGUNAKAN ADALAH ROWS PERTAMA DARI ENDPOINT searchnews by keyword",
+                    saran : "Jika anda tidak mengetahui title lengkap suatu berita silahkan gunakan endpoint searchnews by keyword"
                 })
             }else{
-                try{
-                    let qq= await db.executeQuery(`
-                        insert into comment values('${title}','${isi}','${username}')
-                    `);               
+                let quetitle= await db.executeQuery(`
+                    select * from title where title='${title}'`
+                ); 
+                idtitleberita = quetitle.rows[0].id;
+                try{                                   
                     let cekapihit= await db.executeQuery(`
                         select * from users where username='${username}'`
                     );
@@ -571,16 +578,31 @@ app.post('/api/comment', async (req, res) => {
                         let qapi= await db.executeQuery(`
                                 update users set api_hit='${apihit}' where username='${username}'
                         `);
+                        let qq= await db.executeQuery(`
+                            insert into comment values('${idtitleberita}','${komen}','${username}')
+                        `);
+                        let quecoment= await db.executeQuery(`
+                            select * from comment where id_title='${idtitleberita}'`
+                        );
+                        isikomentar=quecoment.rows;
+                        var options ={
+                            'method' : 'GET',
+                            'url' : 'https://newsapi.org/v2/top-headlines?q='+title+'&apiKey=dc49dba7bedd4a40afdad7b3638dc843'
+                        };
+                        request(options, function(error,response){
+                            if(error) throw new Error(error);
+                            var tmp = JSON.parse(response.body);            
+                            tampunganberita=tmp.articles;
+                            console.log(tampunganberita);
+                        });             
                         return res.status(200).json({
                             status: 200,
-                            username: username,
-                            api_hit_sisa: apihit,
-                            title_berita : title,
-                            isi_berita : isi,
-                            message : "COMMENT BERHASIL"
+                            message : "COMMENT BERHASIL",
+                            berita : tampunganberita[0],
+                            comment : isikomentar
+                            
                         }); 
-                    }
-                    
+                    }                    
                 }catch(err){
                     return res.status(401).json({
                         status: 401,
@@ -828,6 +850,7 @@ app.get('/api/getHeadlines/:country',async (req,res)=>{
 app.get('/api/searchnews/:keyword',async (req,res)=>{
     var keyword = req.params.keyword;
     const token = req.header("x-auth-token");
+    let tampunganberita = {};
     let user = {};
     if(!token){
         res.status(401).send("Token not found");
@@ -844,12 +867,43 @@ app.get('/api/searchnews/:keyword',async (req,res)=>{
             'method' : 'GET',
             'url' : 'https://newsapi.org/v2/top-headlines?q='+keyword+'&apiKey=dc49dba7bedd4a40afdad7b3638dc843'
         };
-          request(options, function(error,response){
+        request(options, function(error,response){
             if(error) throw new Error(error);
-            var tmp = JSON.parse(response.body);
+            var tmp = JSON.parse(response.body);            
+            tampunganberita=tmp.articles;
             console.log(tmp.articles);
-            res.status(200).send(tmp.articles);
         });
+        let q1= await db.executeQuery(`
+            select count(*) from title
+        `);
+        var jumcode=q1.rows[0].count;
+        jumcode++;
+        let cek= await db.executeQuery(`
+            select count(*) from title where title='${tampunganberita[0].title}'`
+        );
+        var jumlah = cek.rows[0].count;
+        var consolog=tampunganberita[0].title;
+        var iduntukcomment = jumcode;
+        if(jumlah <= 0){
+            let q2= await db.executeQuery(`
+                insert into title values ('${jumcode}','${tampunganberita[0].title}')
+            `); 
+            console.log("DATABASE DENGAN TITLE '"+consolog+"' DIMASUKKAN KEDALAM DATABASE!!")
+            console.log("JIKA INGIN COMMENT GUNAKAN ENDPOINT COMMENT & MASUKKAN IDTITLE = '"+jumcode+"' TERSEBUT")
+            tampungancomment=tampunganberita[0];
+        }else{
+            let qtit= await db.executeQuery(`
+                select * from title where title='${consolog}'
+            `);
+            iduntukcomment=qtit.rows[0].id;
+            tampungancomment=tampunganberita[0];
+            console.log("DATABASE DENGAN ID_TITLE '"+iduntukcomment+"' SUDAH ADA TINGGAL COMMENT SAJA")
+        }        
+        return res.status(200).json({
+            status: 200,
+            id_title_untuk_comment:iduntukcomment,
+            berita: tampunganberita
+        })
     }
 });
 
