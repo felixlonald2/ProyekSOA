@@ -47,18 +47,30 @@ app.post('/api/topup',async function(req, res){
 
     let user = {};
     if(!token){
-        res.status(401).send("Token not found");
+        return res.status(404).json({
+            status: 404,
+            message: "TOKEN NOT FOUND"
+        });
     }
     try{
         user = jwt.verify(token,"proyeksoa");
     }catch(err){
-        res.status(401).send("Token Invalid");
+        return res.status(401).json({
+            status: 401,
+            message: "TOKEN INVALID"
+        }); 
     }
     if((new Date().getTime()/1000)-user.iat>3*86400){
-        return res.status(400).send("Token expired");
+        return res.status(400).json({
+            status: 400,
+            message: "TOKEN EXPIRED"
+        }); 
     }else{
         if(username==""||password==""||nominal==""){
-            return res.status(400).send("FIELD TIDAK BOLEH KOSONG")
+            return res.status(400).json({
+                status: 400,
+                message: "FIELD TIDAK BOLEH KOSONG"
+            }); 
         }else{
             let query= await db.executeQuery(`
                 select count(*) from users where username='${username}' and password='${password}'`
@@ -101,11 +113,17 @@ app.post('/api/topup',async function(req, res){
                         nominal_top_up  : nominal
                     });
                 }else{
-                    res.status(400).send("API HIT TIDAK CUKUP");
+                    return res.status(400).json({
+                        status: 400,
+                        message: "API HIT TIDAK CUKUP"
+                    }); 
                 }
                 
             }else{
-                res.status(400).send("USER TIDAK DITEMUKAN")
+                return res.status(404).json({
+                    status: 404,
+                    message: "USER TIDAK DITEMUKAN"
+                }); 
             }        
         }
     }
@@ -121,18 +139,30 @@ app.post('/api/pembayaran',async function(req, res){
 
     let user = {};
     if(!token){
-        res.status(401).send("Token not found");
+        return res.status(404).json({
+            status: 404,
+            message: "TOKEN NOT FOUND"
+        });
     }
     try{
         user = jwt.verify(token,"proyeksoa");
     }catch(err){
-        res.status(401).send("Token Invalid");
+        return res.status(401).json({
+            status: 401,
+            message: "TOKEN INVALID"
+        }); 
     }
     if((new Date().getTime()/1000)-user.iat>3*86400){
-        return res.status(400).send("Token expired");
+        return res.status(400).json({
+            status: 400,
+            message: "TOKEN EXPIRED"
+        }); 
     }else{
         if(username==""||password==""||nominal==""){
-            return res.status(400).send("FIELD TIDAK BOLEH KOSONG")
+            return res.status(400).json({
+                status: 400,
+                message: "FIELD TIDAK BOLEH KOSONG"
+            }); 
         }else{
             let datauser= await db.executeQuery(`
                 select count(*) from users where username='${username}' and password='${password}'
@@ -140,7 +170,10 @@ app.post('/api/pembayaran',async function(req, res){
             var adauser = datauser.rows[0].count;
             if(adauser<=0){
                 console.log("TIDAK DITEMUKAN USER");
-                return res.status(400).send("USER TIDAK DITEMUKAN")
+                return res.status(404).json({
+                    status: 404,
+                    message: "USER TIDAK DITEMUKAN"
+                }); 
             }else if (adauser > 0 ){
                 console.log("USER DITEMUKAN MEMULAI PROSES CEK KODE")
                 let cekapihit= await db.executeQuery(`
@@ -148,7 +181,10 @@ app.post('/api/pembayaran',async function(req, res){
                 );
                 apihit = cekapihit.rows[0].api_hit;
                 if(apihit<=0){
-                    return res.status(400).send("API HIT TIDAK CUKUP")
+                    return res.status(400).json({
+                        status: 400,
+                        message: "API HIT TIDAK CUKUP"
+                    }); 
                 }else{
                     apihit--;
                     let datatopup= await db.executeQuery(`
@@ -157,7 +193,10 @@ app.post('/api/pembayaran',async function(req, res){
                     var adatagihan = datatopup.rows[0].count;
                     if(adatagihan<=0){
                         console.log("TIDAK DITEMUKAN TAGIHAN");
-                        return res.status(400).send("TAGIHAN TIDAK DITEMUKAN")
+                        return res.status(404).json({
+                            status: 404,
+                            message: "TAGIHAN TIDAK DITEMUKAN"
+                        }); 
                     }else{
                         console.log("KODE DITEMUKAN MEMULAI PROSES PEMBAYARAN")
                         let datasaldo= await db.executeQuery(`
@@ -419,18 +458,30 @@ app.get('/api/getcomment', async (req, res) => {
     const token = req.header("x-auth-token");
     let user = {};
     if(!token){
-        res.status(401).send("Token not found");
+        return res.status(404).json({
+            status: 404,
+            message: "TOKEN NOT FOUND"
+        }); 
     }
     try{
         user = jwt.verify(token,"proyeksoa");
     }catch(err){
-        res.status(401).send("Token Invalid");
+        return res.status(401).json({
+            status: 401,
+            message: "TOKEN INVALID"
+        }); 
     }
     if((new Date().getTime()/1000)-user.iat>3*86400){
-        return res.status(400).send("Token expired");
+        return res.status(400).json({
+            status: 400,
+            message: "TOKEN EXPIRED"
+        }); 
     }else{
         if(title==""){
-            return res.status(400).send("FIELD TIDAK BOLEH KOSONG")
+            return res.status(400).json({
+                status: 400,
+                message: "FIELD TIDAK BOLEH KOSONG"
+            }); 
         }else{
             let query= await db.executeQuery(`
                 select count(*) from comment where title_berita='${title}'`
@@ -439,7 +490,10 @@ app.get('/api/getcomment', async (req, res) => {
             console.log("CHECKING TITLE....")
             if(jumlah <= 0){
                 console.log("TITLE TIDAK DITEMUKAN")
-                res.status(400).send("TITLE BERITA TIDAK DITEMUKAN")
+                return res.status(404).json({
+                    status: 404,
+                    message: "TITLE BERITA TIDAK DITEMUKAN"
+                }); 
             }else{
                 console.log("TITLE DITEMUKAN")
                 console.log("MENAMPILKAN COMMENT....")
@@ -465,26 +519,41 @@ app.post('/api/comment', async (req, res) => {
     var apihit;
     let user = {};
     if(!token){
-        res.status(401).send("Token not found");
+        return res.status(404).json({
+            status: 404,
+            message: "TOKEN NOT FOUND"
+        }); 
     }
     try{
         user = jwt.verify(token,"proyeksoa");
     }catch(err){
-        res.status(401).send("Token Invalid");
+        return res.status(401).json({
+            status: 401,
+            message: "TOKEN INVALID"
+        }); 
     }
     if((new Date().getTime()/1000)-user.iat>3*86400){
-        return res.status(400).send("Token expired");
+        return res.status(400).json({
+            status: 400,
+            message: "TOKEN EXPIRED"
+        }); 
     }else{
         var username = user.username;
         if(isi==""||title==""){
-            return res.status(400).send("FIELD TIDAK BOLEH KOSONG")
+            return res.status(400).json({
+                status: 400,
+                message: "FIELD TIDAK BOLEH KOSONG"
+            }); 
         }else{
             let query= await db.executeQuery(`
                 select count(*) from comment where title_berita='${title}'`
             );
             var jumlah = query.rows[0].count;
             if(jumlah <= 0){
-                res.status(400).send("TITLE BERITA TIDAK DITEMUKAN")
+                return res.status(404).json({
+                    status: 404,
+                    message: "TITLE BERITA TIDAK DITEMUKAN"
+                })
             }else{
                 try{
                     let qq= await db.executeQuery(`
@@ -512,7 +581,10 @@ app.post('/api/comment', async (req, res) => {
                     }
                     
                 }catch(err){
-                    res.status(401).send("COMMENT GAGAL");
+                    return res.status(401).json({
+                        status: 401,
+                        message: "COMMENT GAGAL"
+                    })
                 }             
             }
             
