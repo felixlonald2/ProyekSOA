@@ -38,7 +38,7 @@ app.get('/', async (req, res) => {
         user: query.rows
     });
 });
-
+//andika
 app.post('/api/topup',async function(req, res){
     var username = req.body.username;
     var password = req.body.password;
@@ -130,7 +130,7 @@ app.post('/api/topup',async function(req, res){
     }
     
 });
-
+//andika
 app.post('/api/pembayaran',async function(req, res){
     var username = req.body.username;
     var password = req.body.password;
@@ -231,7 +231,7 @@ app.post('/api/pembayaran',async function(req, res){
         }
     } 
 });
-
+//farrell
 app.post('/api/registerUser', async (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
@@ -260,7 +260,7 @@ app.post('/api/registerUser', async (req, res) => {
         });
     }
 });
-
+//farrell
 app.post('/api/loginUser', async (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
@@ -283,7 +283,7 @@ app.post('/api/loginUser', async (req, res) => {
         });
     }
 });
-
+//farrell
 app.get('/api/getHeadlines/:country',async (req,res)=>{
     var country = req.params.country;
     const token = req.header("x-auth-token");
@@ -311,7 +311,7 @@ app.get('/api/getHeadlines/:country',async (req,res)=>{
         });
     }
 });
-
+//farrell
 app.get('/api/getHeadlines/:country/:category',async (req,res)=>{
     var country = req.params.country;
     var category = req.params.category;
@@ -340,7 +340,7 @@ app.get('/api/getHeadlines/:country/:category',async (req,res)=>{
         });
     }
 });
-
+//felix
 app.post('/api/addApiHit', async (req, res) => {
     var apihit = parseInt(req.body.apihit);
     const token = req.header("x-auth-token");
@@ -399,7 +399,7 @@ app.post('/api/addApiHit', async (req, res) => {
         }
     }
 });
-
+//felix
 app.post('/api/subscription', async (req, res) => {
     const token = req.header("x-auth-token");
 
@@ -453,7 +453,7 @@ app.post('/api/subscription', async (req, res) => {
         }
     }
 });
-
+//andika
 app.get('/api/getcomment/:id_title', async (req, res) => {
     var idtitle = req.params.id_title;
     const token = req.header("x-auth-token");
@@ -513,7 +513,7 @@ app.get('/api/getcomment/:id_title', async (req, res) => {
         }   
     }
 });
-
+//andika
 app.post('/api/comment/:titleberita', async (req, res) => {
     var title = req.params.titleberita;
     var komen = req.body.comment;
@@ -614,7 +614,7 @@ app.post('/api/comment/:titleberita', async (req, res) => {
         }   
     }
 });
-
+//albert
 app.post('/api/insertNews', uploads.single("gambar"), async (req, res) => {
     var judul = req.body.judul;
     var deskripsi = req.body.deskripsi;
@@ -671,7 +671,7 @@ app.post('/api/insertNews', uploads.single("gambar"), async (req, res) => {
     }
     
 });
-
+//albert
 app.get('/api/getAuthorNews', async (req, res) => {
     const token = req.header("x-auth-token");
 
@@ -711,7 +711,7 @@ app.get('/api/getAuthorNews', async (req, res) => {
         });
     }
 });
-
+//albert
 app.delete('/api/deleteNews', async (req, res) => {
     var id_news = req.body.id_news;
     const token = req.header("x-auth-token");
@@ -762,7 +762,7 @@ app.delete('/api/deleteNews', async (req, res) => {
     }
     
 });
-
+//albert
 app.put('/api/updateNews', uploads.single("gambar"), async (req, res) => {
     var id_news = req.body.id_news;
     var judul = req.body.judul;
@@ -818,7 +818,7 @@ app.put('/api/updateNews', uploads.single("gambar"), async (req, res) => {
         });
     }
 });
-
+//felix
 app.get('/api/getHeadlines/:country',async (req,res)=>{
     var country = req.params.country;
     const token = req.header("x-auth-token");
@@ -846,7 +846,7 @@ app.get('/api/getHeadlines/:country',async (req,res)=>{
         });
     }
 });
-
+//felix
 app.get('/api/searchnews/:keyword',async (req,res)=>{
     var keyword = req.params.keyword;
     const token = req.header("x-auth-token");
@@ -906,7 +906,7 @@ app.get('/api/searchnews/:keyword',async (req,res)=>{
         })
     }
 });
-
+//felix
 app.get('/api/getNews', async (req, res) => {
     let query= await db.executeQuery(`
         select * from berita
