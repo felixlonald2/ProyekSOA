@@ -1,7 +1,8 @@
 const express = require('express'),
       app = express(),
       bodyParser = require('body-parser'),
-      PORT = 3000,
+      port = process.env.port || 3000,
+    //   PORT = 3000,
       fetch = require('node-fetch'),
       db = require('./database');
 const request= require('request');
@@ -266,8 +267,8 @@ app.get('/api/getHeadlines/:country',async (req,res)=>{
         request(options, function(error,response){
             if(error) throw new Error(error);
             var tmp = JSON.parse(response.body);
-            console.log(tmp.articles);
-            res.status(200).send(tmp.articles);
+            var articles = tmp.articles;
+            res.status(200).send(articles);
         });
     }
 });
@@ -722,7 +723,62 @@ app.put('/api/updateNews', uploads.single("gambar"), async (req, res) => {
             message: 'Field tidak boleh kosong!'
         });
     }
-    
+});
+
+app.get('/api/getHeadlines/:country',async (req,res)=>{
+    var country = req.params.country;
+    const token = req.header("x-auth-token");
+    let user = {};
+    if(!token){
+        res.status(401).send("Token not found");
+    }
+    try{
+        user = jwt.verify(token,"proyeksoa");
+    }catch(err){
+        res.status(401).send("Token Invalid");
+    }
+    if((new Date().getTime()/1000)-user.iat>3*86400){
+        return res.status(400).send("Token expired");
+    }else{
+        var options ={
+            'method' : 'GET',
+            'url' : 'https://newsapi.org/v2/top-headlines?country='+country+'&apiKey=dc49dba7bedd4a40afdad7b3638dc843'
+        };
+        request(options, function(error,response){
+            if(error) throw new Error(error);
+            var tmp = JSON.parse(response.body);
+            var articles = tmp.articles;
+            res.status(200).send(articles);
+        });
+    }
+});
+
+app.get('/api/searchnews/:keyword',async (req,res)=>{
+    var keyword = req.params.keyword;
+    const token = req.header("x-auth-token");
+    let user = {};
+    if(!token){
+        res.status(401).send("Token not found");
+    }
+    try{
+        user = jwt.verify(token,"proyeksoa");
+    }catch(err){
+        res.status(401).send("Token Invalid");
+    }
+    if((new Date().getTime()/1000)-user.iat>3*86400){
+        return res.status(400).send("Token expired");
+    }else{
+        var options ={
+            'method' : 'GET',
+            'url' : 'https://newsapi.org/v2/top-headlines?q='+keyword+'&apiKey=dc49dba7bedd4a40afdad7b3638dc843'
+        };
+          request(options, function(error,response){
+            if(error) throw new Error(error);
+            var tmp = JSON.parse(response.body);
+            console.log(tmp.articles);
+            res.status(200).send(tmp.articles);
+        });
+    }
 });
 
 app.get('/api/getNews', async (req, res) => {
@@ -737,5 +793,5 @@ app.get('/api/getNews', async (req, res) => {
 
 
 app.listen(process.env.PORT,function(){
-    console.log("Listening port 3000....");
+    console.log("Listening to port "+process.env.PORT);
 });
