@@ -8,9 +8,6 @@ const express = require('express'),
 const request= require('request');
 const jwt = require('jsonwebtoken');
 
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
-// app.use(express.static('public'));
 const multer = require("multer");
 
 const storage = multer.diskStorage({
@@ -27,6 +24,7 @@ const uploads = multer({
     storage: storage
 });
 
+//Farrell
 router.post('/loginUser', async (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
@@ -50,6 +48,7 @@ router.post('/loginUser', async (req, res) => {
     }
 });
 
+//Farrell
 router.post('/registerUser', async (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
@@ -79,6 +78,7 @@ router.post('/registerUser', async (req, res) => {
     }
 });
 
+//Andika
 router.post('/topup',async function(req, res){
     var username = req.body.username;
     var password = req.body.password;
@@ -170,7 +170,8 @@ router.post('/topup',async function(req, res){
     }
 });
 
-router.post('/api/pembayaran',async function(req, res){
+//Andika
+router.post('/pembayaran',async function(req, res){
     var username = req.body.username;
     var password = req.body.password;
     var kode = req.body.kodetopup;
@@ -271,7 +272,8 @@ router.post('/api/pembayaran',async function(req, res){
     } 
 });
 
-router.post('/api/addApiHit', async (req, res) => {
+//Felix
+router.post('/addApiHit', async (req, res) => {
     var apihit = parseInt(req.body.apihit);
     const token = req.header("x-auth-token");
 
@@ -330,7 +332,8 @@ router.post('/api/addApiHit', async (req, res) => {
     }
 });
 
-router.post('/api/subscription', async (req, res) => {
+//Felix
+router.post('/subscription', async (req, res) => {
     const token = req.header("x-auth-token");
 
     let user = {};
