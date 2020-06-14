@@ -79,7 +79,7 @@ router.post('/registerUser', async (req, res) => {
     }
 });
 
-router.post('/api/topup',async function(req, res){
+router.post('/topup',async function(req, res){
     var username = req.body.username;
     var password = req.body.password;
     var nominal = req.body.nominal;
