@@ -33,9 +33,11 @@ const storage = multer.diskStorage({
 const uploads = multer({
     storage: storage
 });
+
 app.get("/",async function(req,res){
     res.render("index");
 });
+
 app.listen(process.env.PORT,function(){
     console.log("Listening to port "+process.env.PORT);
 });
