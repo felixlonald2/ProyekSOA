@@ -6,7 +6,8 @@ const express = require('express'),
       db = require('./database');
 const request= require('request');
 const jwt = require('jsonwebtoken');
-const stripe = require('stripe')('sk_test_51GuFJmKXe5VFGA8ZdHbRBGZZiVUlrDnoR0KtdIghwqet0v0M0ZtY9aoWx92nJuAaM7YOhgNMmpcNAguxWOEDvFG9004xuhVpZb')
+const keys = require('./config/keys');
+const stripe = require('stripe')(keys.stripeSecretKey);
 const exphbs = require('express-handlebars')
 
 app.engine('handlebars',exphbs({defaultLayout:'main'}));
@@ -35,7 +36,9 @@ const uploads = multer({
 });
 
 app.get("/",async function(req,res){
-    res.render("index");
+    res.render("index",{
+        stripePublishableKey: keys.stripePublishableKey
+    });
 });
 
 app.listen(process.env.PORT,function(){
