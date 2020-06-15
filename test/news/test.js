@@ -2,7 +2,6 @@ const testLoader= require('../util/testLoader');
 
 //IMPORT TEST FILE DISNI
 
-testLoader('/login', '../users/login');
 testLoader('/country', '../news/country');
 testLoader('/category', '../news/category');
 testLoader('/search', '../news/search');

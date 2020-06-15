@@ -42,7 +42,7 @@ it('Token tidak ada', (done) => {
             res.should.have.status(404);
             res.body.should.be.a('object');
             res.body.should.have.property('status').eql(404);
-            res.body.should.have.property('message').eql('TOKEN NOT FOUND');
+            res.body.should.have.property('message').eql('Token not found');
         done();
         });
 }).timeout(10000);
