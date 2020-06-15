@@ -26,7 +26,24 @@ it('Token tidak ada', (done) => {
         .post(endpoint)
         .send({
             username: "lonald",
-            password: "alaasd",
+            password: "asd",
+            nominal: 1
+        })
+        .end((err, res) => {
+            res.should.have.status(404);
+            res.body.should.be.a('object');
+            res.body.should.have.property('status').eql(404);
+            res.body.should.have.property('message').eql('TOKEN NOT FOUND');
+        done();
+        });
+}).timeout(10000);
+
+it('Token tidak ada', (done) => {
+    chai.request("http://localhost:3000")
+        .post(endpoint)
+        .send({
+            username: "lonald",
+            password: "asd",
             nominal: 1
         })
         .end((err, res) => {

@@ -7,8 +7,6 @@ chai.use(chaiHttp);
 const endpoint= '/api/news/searchnews/corona';
 
 let token;
-let token2;
-let user;
 before((done) => {
     chai.request("http://localhost:3000")
         .post('/api/users/loginUser')
@@ -36,14 +34,14 @@ it('Token salah', (done) => {
     chai.request("http://localhost:3000")
         .get(endpoint)
         .set("x-auth-token","kokokokoko")
-        end((err, res) => {
+        .end((err, res) => {
             res.should.have.status(401);
             res.text.should.eql('Token Invalid')
         done();
         });
 }).timeout(10000);
 
-it('Berita tidak ada!', (done) => {
+it('Berita yang dicari tidak ada', (done) => {
     chai.request("http://localhost:3000")
         .get(endpoint+"asd")
         .set("x-auth-token",token)
@@ -56,7 +54,7 @@ it('Berita tidak ada!', (done) => {
         });
 }).timeout(10000);
 
-it('Berhasil mencari berita!', (done) => {
+it('Berita berhasil dicari', (done) => {
     chai.request("http://localhost:3000")
         .get(endpoint)
         .set("x-auth-token",token)
@@ -64,8 +62,8 @@ it('Berhasil mencari berita!', (done) => {
             res.should.have.status(200);
             res.body.should.be.a('object');
             res.body.should.have.property('status').eql(200);
-            res.body.should.have.property('message');
+            res.body.should.have.property('id_title_untuk_comment');
         done();
         });
-}).timeout(10000);
+}).timeout(50000);
 

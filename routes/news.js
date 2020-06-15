@@ -30,12 +30,12 @@ router.get('/getHeadlines/:country',async (req,res)=>{
     const token = req.header("x-auth-token");
     let user = {};
     if(!token){
-        res.status(404).send("Token not found");
+        return res.status(404).send("Token not found");
     }
     try{
         user = jwt.verify(token,"proyeksoa");
     }catch(err){
-        res.status(401).send("Token Invalid");
+        return res.status(401).send("Token Invalid");
     }
     if((new Date().getTime()/1000)-user.iat>3*86400){
         return res.status(400).send("Token expired");
@@ -141,12 +141,12 @@ router.get('/getHeadlines/:country/:category',async (req,res)=>{
     const token = req.header("x-auth-token");
     let user = {};
     if(!token){
-        res.status(401).send("Token not found");
+        return res.status(404).send("Token not found");
     }
     try{
         user = jwt.verify(token,"proyeksoa");
     }catch(err){
-        res.status(401).send("Token Invalid");
+        return res.status(401).send("Token Invalid");
     }
     if((new Date().getTime()/1000)-user.iat>3*86400){
         return res.status(400).send("Token expired");
@@ -621,7 +621,7 @@ router.get('/searchnews/:keyword',async (req,res)=>{
     let user = {};
     var temp = [];
     if(!token){
-        res.status(401).send("Token not found");
+        res.status(404).send("Token not found");
     }
     try{
         user = jwt.verify(token,"proyeksoa");
@@ -631,12 +631,12 @@ router.get('/searchnews/:keyword',async (req,res)=>{
     if((new Date().getTime()/1000)-user.iat>3*86400){
         return res.status(400).send("Token expired");
     }else{
-
         var options ={
             'method' : 'GET',
             'url' : 'https://newsapi.org/v2/top-headlines?q='+keyword+'&apiKey=dc49dba7bedd4a40afdad7b3638dc843'
         };
-        request(options, function(error,response){
+
+        request(options, async function(error,response){
             if(error) throw new Error(error);
             var tmp = JSON.parse(response.body);            
             tampunganberita=tmp.articles;
@@ -697,39 +697,40 @@ router.get('/searchnews/:keyword',async (req,res)=>{
                     temp.push(newstemp);
                 }
             }
-
-        });
-        let q1= await db.executeQuery(`
-            select count(*) from title
-        `);
-        var jumcode=q1.rows[0].count;
-        jumcode++;
-        let cek= await db.executeQuery(`
-            select count(*) from title where title='${tampunganberita[0].title}'`
-        );
-        var jumlah = cek.rows[0].count;
-        var consolog=tampunganberita[0].title;
-        var iduntukcomment = jumcode;
-        if(jumlah <= 0){
-            let q2= await db.executeQuery(`
-                insert into title values ('${jumcode}','${tampunganberita[0].title}')
-            `); 
-            console.log("DATABASE DENGAN TITLE '"+consolog+"' DIMASUKKAN KEDALAM DATABASE!!")
-            console.log("JIKA INGIN COMMENT GUNAKAN ENDPOINT COMMENT & MASUKKAN IDTITLE = '"+jumcode+"' TERSEBUT")
-            tampungancomment=tampunganberita[0];
-        }else{
-            let qtit= await db.executeQuery(`
-                select * from title where title='${consolog}'
+            let q1= await db.executeQuery(`
+                select count(*) from title
             `);
-            iduntukcomment=qtit.rows[0].id;
-            tampungancomment=tampunganberita[0];
-            console.log("DATABASE DENGAN ID_TITLE '"+iduntukcomment+"' SUDAH ADA TINGGAL COMMENT SAJA")
-        }        
-        return res.status(200).json({
-            status: 200,
-            id_title_untuk_comment:iduntukcomment,
-            berita: temp
-        })
+            var jumcode=q1.rows[0].count;
+            jumcode++;
+            let cek= await db.executeQuery(`
+                select count(*) from title where title='${tampunganberita[0].title}'`
+            );
+
+            var jumlah = cek.rows[0].count;
+            var consolog=tampunganberita[0].title;
+            var iduntukcomment = jumcode;
+
+            if(jumlah <= 0){
+                let q2= await db.executeQuery(`
+                    insert into title values ('${jumcode}','${tampunganberita[0].title}')
+                `); 
+                console.log("DATABASE DENGAN TITLE '"+consolog+"' DIMASUKKAN KEDALAM DATABASE!!")
+                console.log("JIKA INGIN COMMENT GUNAKAN ENDPOINT COMMENT & MASUKKAN IDTITLE = '"+jumcode+"' TERSEBUT")
+                tampungancomment=tampunganberita[0];
+            }else{
+                let qtit= await db.executeQuery(`
+                    select * from title where title='${consolog}'
+                `);
+                iduntukcomment=qtit.rows[0].id;
+                tampungancomment=tampunganberita[0];
+                console.log("DATABASE DENGAN ID_TITLE '"+iduntukcomment+"' SUDAH ADA TINGGAL COMMENT SAJA")
+            }        
+            return res.status(200).json({
+                status: 200,
+                id_title_untuk_comment:iduntukcomment,
+                berita: temp
+            })
+        });
     }
 });
 
@@ -739,12 +740,12 @@ router.get('/detailnews/:idtitle',async (req,res)=>{
     const token = req.header("x-auth-token");
 
     if(!token){
-        res.status(401).send("Token not found");
+        return res.status(401).send("Token not found");
     }
     try{
         user = jwt.verify(token,"proyeksoa");
     }catch(err){
-        res.status(401).send("Token Invalid");
+        return res.status(401).send("Token Invalid");
     }
     if((new Date().getTime()/1000)-user.iat>3*86400){
         return res.status(400).send("Token expired");
@@ -823,7 +824,7 @@ router.get('/detailnews/:idtitle',async (req,res)=>{
                     }
                     temp.push(newstemp);
                 }
-                res.status(200).send(temp[0]);
+                return res.status(200).send(temp[0]);
             }
         });
     }
