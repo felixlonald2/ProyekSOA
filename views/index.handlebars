@@ -1,0 +1,30 @@
+<section class="py-2">
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <h1 class="display-3 mt-3 pt-5">
+                HALAMAN PEMBAYARAN PROYEK SOA
+            </h1><p class="lead">COBA PEMBAYARAN PAKAI STRIP</p>
+            <form action="/api/users/pembayaran" method="post">
+                <input type="text" name="xauthtoken" placeholder="X Auth Token" class="textbox"><br>
+                <input type="text" name="kodetopup" placeholder="TopUpCode" class="textbox"><br>
+                <script
+                src="http://checkout.stripe.com/checkout.js"
+                class="stripe-button"
+                data-key="pk_test_51GuFJmKXe5VFGA8ZGUCAjcNZY6AhzBKDbhAFUt8qucPH42CiQ0raYxRs7cA44dCC2b0WP8qX1nQXFzdIC1Xn8YsB00CjDBD3sd"
+                data-name="Top Up"
+                data-description="Belum termasuk biaya Admin"
+                data-image="/gambar/coba.jpg"
+                data-locale="auto"
+                >
+                </script>
+                <script>
+                    document.getElementsByClassName('stripe-button-el')[0].style.display = 'none';
+                </script>
+                <button type="submit" class="btn btn-outline-dark text-white btn-lg"> BAYAR TOP MU</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <img src="/gambar/coba.jpg" alt="" class="img-fluid">
+        </div>
+    </div>
+</section>

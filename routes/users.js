@@ -7,8 +7,9 @@ const express = require('express'),
       db = require('../database');
 const request= require('request');
 const jwt = require('jsonwebtoken');
-
+const stripe = require('stripe')('sk_test_51GuFJmKXe5VFGA8ZdHbRBGZZiVUlrDnoR0KtdIghwqet0v0M0ZtY9aoWx92nJuAaM7YOhgNMmpcNAguxWOEDvFG9004xuhVpZb')
 const multer = require("multer");
+const { default: Stripe } = require('stripe');
 
 const storage = multer.diskStorage({
     destination: function(req,file,callback){
@@ -172,100 +173,96 @@ router.post('/topup',async function(req, res){
 
 //Andika
 router.post('/pembayaran',async function(req, res){
-    var username = req.body.username;
-    var password = req.body.password;
     var kode = req.body.kodetopup;
-    var apihit;
-    const token = req.header("x-auth-token");
-
+    const token = req.body.xauthtoken;
+    
     let user = {};
     if(!token){
-        return res.status(404).json({
+        res.status(404).json({
             status: 404,
-            message: "TOKEN NOT FOUND"
-        });
+            message: "Token not found"
+        }); 
     }
     try{
         user = jwt.verify(token,"proyeksoa");
     }catch(err){
-        return res.status(401).json({
+        res.status(401).json({
             status: 401,
-            message: "TOKEN INVALID"
-        }); 
+            message: "Token Invalid"
+        });
     }
+    var username=user.username;
     if((new Date().getTime()/1000)-user.iat>3*86400){
-        return res.status(400).json({
+        res.status(400).json({
             status: 400,
-            message: "TOKEN EXPIRED"
-        }); 
+            message: "Token EXPIRED"
+        });
     }else{
-        if(username==""||password==""||nominal==""){
-            return res.status(400).json({
+        if(kode==""||token==""){
+            res.status(400).json({
                 status: 400,
-                message: "FIELD TIDAK BOLEH KOSONG"
-            }); 
+                message: 'FIELD tidak boleh kosong!'
+            });
         }else{
             let datauser= await db.executeQuery(`
-                select count(*) from users where username='${username}' and password='${password}'
+                select count(*) from users where username='${username}'
             `);
             var adauser = datauser.rows[0].count;
             if(adauser<=0){
-                return res.status(404).json({
+                console.log("USER TIDAK DITEMUKAN");
+                res.status(404).json({
                     status: 404,
-                    message: "USER TIDAK DITEMUKAN"
-                }); 
+                    message: "USER not found"
+                });
             }else if (adauser > 0 ){
                 console.log("USER DITEMUKAN MEMULAI PROSES CEK KODE")
-                let cekapihit= await db.executeQuery(`
-                    select * from users where username='${username}' and password='${password}'`
-                );
-                apihit = cekapihit.rows[0].api_hit;
-                if(apihit<=0){
-                    return res.status(400).json({
-                        status: 400,
-                        message: "API HIT TIDAK CUKUP"
+                let datatopup= await db.executeQuery(`
+                    select count(*) from delaytopup where kodetopup='${kode}'
+                `);
+                var adatagihan = datatopup.rows[0].count;
+                if(adatagihan<=0){
+                    res.status(404).json({
+                        status: 404,
+                        message: "Tagihan not found"
                     }); 
                 }else{
-                    apihit--;
-                    let datatopup= await db.executeQuery(`
-                        select count(*) from delaytopup where kodetopup='${kode}'
+                    console.log("KODE DITEMUKAN MEMULAI PROSES PEMBAYARAN")
+                    let datasaldo= await db.executeQuery(`
+                        select * from users where username='${username}'
                     `);
-                    var adatagihan = datatopup.rows[0].count;
-                    if(adatagihan<=0){
-                        console.log("TIDAK DITEMUKAN TAGIHAN");
-                        return res.status(404).json({
-                            status: 404,
-                            message: "TAGIHAN TIDAK DITEMUKAN"
-                        }); 
-                    }else{
-                        console.log("KODE DITEMUKAN MEMULAI PROSES PEMBAYARAN")
-                        let datasaldo= await db.executeQuery(`
-                            select * from users where username='${username}' and password='${password}'
-                        `);
-                        var saldo = datasaldo.rows[0].saldo;
-                        let datanominal= await db.executeQuery(`
-                            select * from delaytopup where kodetopup='${kode}'
-                        `);
-                        var nominal = datanominal.rows[0].nominal;
-                        console.log(nominal);
-                        saldo+=nominal;    
-                        let qq= await db.executeQuery(`
-                            update users set saldo='${saldo}',api_hit='${apihit}' where username='${username}' and password='${password}'
-                        `);
-                        let dataupdate= await db.executeQuery(`
-                            select * from users where username='${username}' and password='${password}'
-                        `);
-                        console.log("SALDO TELAH TERISI SEBANYAK "+nominal);
-                        console.log("SALDO ANDA SEKARANG "+saldo);
-                        let query= await db.executeQuery(`
-                            delete from delaytopup where kodetopup='${kode}'`
-                        );
-                        return res.status(200).json({
-                            status: 200,
-                            user: dataupdate.rows
-                        }); 
-                    }
-                }            
+                    var saldo = datasaldo.rows[0].saldo;
+                    let datanominal= await db.executeQuery(`
+                        select * from delaytopup where kodetopup='${kode}'
+                    `);
+                    var nominal = datanominal.rows[0].nominal;                    
+                    console.log(nominal);
+                    saldo+=nominal;    
+                    let qq= await db.executeQuery(`
+                        update users set saldo='${saldo}' where username='${username}'
+                    `);
+                    let dataupdate= await db.executeQuery(`
+                        select * from users where username='${username}'
+                    `);
+                    console.log("SALDO TELAH TERISI SEBANYAK "+nominal);
+                    console.log("SALDO ANDA SEKARANG "+saldo);
+                    let query= await db.executeQuery(`
+                        delete from delaytopup where kodetopup='${kode}'`
+                    );
+                    stripe.customers.create({
+                        email : req.body.stripeEmail,
+                        source : req.body.stripeToken
+                    })
+                    .then(customer => stripe.charges.create({
+                        amount : nominal,
+                        description:"Tagihan Top Up Saldo",
+                        currency:'usd',
+                        customer:customer.id
+                    }))
+                    res.status(200).json({
+                        status: 200,
+                        message: dataupdate.rows
+                    });
+                }   
             }
         }
     } 

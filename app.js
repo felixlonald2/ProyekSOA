@@ -6,6 +6,12 @@ const express = require('express'),
       db = require('./database');
 const request= require('request');
 const jwt = require('jsonwebtoken');
+const stripe = require('stripe')('sk_test_51GuFJmKXe5VFGA8ZdHbRBGZZiVUlrDnoR0KtdIghwqet0v0M0ZtY9aoWx92nJuAaM7YOhgNMmpcNAguxWOEDvFG9004xuhVpZb')
+const exphbs = require('express-handlebars')
+
+app.engine('handlebars',exphbs({defaultLayout:'main'}));
+app.set("view engine","handlebars");
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -27,7 +33,9 @@ const storage = multer.diskStorage({
 const uploads = multer({
     storage: storage
 });
-
+app.get("/",async function(req,res){
+    res.render("index");
+});
 app.listen(process.env.PORT,function(){
     console.log("Listening to port "+process.env.PORT);
 });
