@@ -262,7 +262,7 @@ router.post('/pembayaran',async function(req, res){
                         status: 200,
                         message: dataupdate.rows
                     });
-                }   
+                }
             }
         }
     } 
