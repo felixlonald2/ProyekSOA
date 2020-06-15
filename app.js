@@ -1,7 +1,7 @@
 const express = require('express'),
       app = express(),
       bodyParser = require('body-parser'),
-      port = process.env.port || 3000,=
+      port = process.env.port || 3000,
       fetch = require('node-fetch'),
       db = require('./database');
 const request= require('request');

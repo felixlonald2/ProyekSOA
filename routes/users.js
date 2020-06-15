@@ -210,7 +210,6 @@ router.post('/pembayaran',async function(req, res){
             `);
             var adauser = datauser.rows[0].count;
             if(adauser<=0){
-                console.log("TIDAK DITEMUKAN USER");
                 return res.status(404).json({
                     status: 404,
                     message: "USER TIDAK DITEMUKAN"
@@ -279,12 +278,18 @@ router.post('/addApiHit', async (req, res) => {
 
     let user = {};
     if(!token){
-        res.status(401).send("Token not found");
+        return res.status(404).json({
+            status: 404,
+            message: "Token not found"
+        }); 
     }
     try{
         user = jwt.verify(token,"proyeksoa");
     }catch(err){
-        res.status(401).send("Token Invalid");
+        return res.status(401).json({
+            status: 401,
+            message: "Token Invalid"
+        });
     }
     if((new Date().getTime()/1000)-user.iat>3*86400){
         return res.status(400).send("Token expired");
@@ -338,19 +343,25 @@ router.post('/subscription', async (req, res) => {
 
     let user = {};
     if(!token){
-        res.status(401).send("Token not found");
+        return res.status(404).json({
+            status: 404,
+            message: "Token not found"
+        }); 
     }
     try{
         user = jwt.verify(token,"proyeksoa");
     }catch(err){
-        res.status(401).send("Token Invalid");
+        return res.status(401).json({
+            status: 401,
+            message: "Token Invalid"
+        });
     }
     if((new Date().getTime()/1000)-user.iat>3*86400){
         return res.status(400).send("Token expired");
     }
     if(user.status==1){ 
-        return res.status(200).json({
-            status: 200,
+        return res.status(400).json({
+            status: 400,
             message: 'Anda sudah menjadi author, tidak bisa subscribe lagi!'
         });
     }
@@ -393,4 +404,43 @@ router.post('/subscription', async (req, res) => {
     }
 });
 
+router.delete('/delete/:username', async (req, res) => {
+    var user = req.params.username;
+
+    let query= await db.executeQuery(`delete from users where username = '${user}'`);
+    return res.status(200).json({
+        status: 200,
+        message: 'delete'
+    });
+})
+
+router.put('/update/:username', async (req, res) => {
+    var user = req.params.username;
+
+    let query= await db.executeQuery(`update users set api_hit = ${req.body.api_hit} where username = '${user}'`);
+    return res.status(200).json({
+        status: 200,
+        message: 'update'
+    });
+})
+
+router.put('/updatee/:username', async (req, res) => {
+    var user = req.params.username;
+
+    let query= await db.executeQuery(`update users set saldo = ${req.body.saldo} where username = '${user}'`);
+    return res.status(200).json({
+        status: 200,
+        message: 'updatee'
+    });
+})
+
+router.get('/infouser/:username', async (req, res) => {
+    var user = req.params.username;
+
+    let query= await db.executeQuery(`select * from users where username = '${user}'`);
+    return res.status(200).json({
+        status: 200,
+        message: query.rows[0]
+    });
+})
 module.exports = router;

@@ -30,7 +30,7 @@ router.get('/getHeadlines/:country',async (req,res)=>{
     const token = req.header("x-auth-token");
     let user = {};
     if(!token){
-        res.status(401).send("Token not found");
+        res.status(404).send("Token not found");
     }
     try{
         user = jwt.verify(token,"proyeksoa");
@@ -125,7 +125,10 @@ router.get('/getHeadlines/:country',async (req,res)=>{
                 temp.forEach(element => {
                     tampung.push(element)
                 });
-                res.status(200).send(tampung);
+                return res.status(200).json({
+                    status: 200,
+                    message: tampung
+                });
             }
         });
     }
