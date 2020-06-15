@@ -107,16 +107,16 @@ it('Saldo tidak cukup!', (done) => {
         });
 }).timeout(10000);
 
-it('Berhasil subscribe!', (done) => {
-    chai.request("http://localhost:3000")
-        .post(endpoint)
-        .set("x-auth-token",token)
+// it('Berhasil subscribe!', (done) => {
+//     chai.request("http://localhost:3000")
+//         .post(endpoint)
+//         .set("x-auth-token",token)
 
-        .end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('status').eql(200);
-            res.body.should.have.property('message').eql('Anda berhasil subscribe dan menjadi author, anda dapat membuat berita baru!');
-        done();
-        });
-}).timeout(10000);
+//         .end((err, res) => {
+//             res.should.have.status(200);
+//             res.body.should.be.a('object');
+//             res.body.should.have.property('status').eql(200);
+//             res.body.should.have.property('message').eql('Anda berhasil subscribe dan menjadi author, anda dapat membuat berita baru!');
+//         done();
+//         });
+// }).timeout(10000);

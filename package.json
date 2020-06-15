@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon app.js",
     "test": "mocha",
-    "test-users": "mocha --bail ./test/users/test.js"
+    "test-users": "mocha --bail ./test/users/test.js",
+    "test-news": "mocha --bail ./test/news/test.js"
   },
   "keywords": [],
   "author": "",
