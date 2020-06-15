@@ -35,11 +35,11 @@ const uploads = multer({
     storage: storage
 });
 
-app.get("/",async function(req,res){
-    res.render("index",{
-        stripePublishableKey: keys.stripePublishableKey
-    });
-});
+// app.get("/",async function(req,res){
+//     res.render("index",{
+//         stripePublishableKey: keys.stripePublishableKey
+//     });
+// });
 
 app.listen(process.env.PORT,function(){
     console.log("Listening to port "+process.env.PORT);
