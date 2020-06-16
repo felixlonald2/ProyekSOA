@@ -25,7 +25,7 @@ const uploads = multer({
     storage: storage
 });
 
-//Farrell
+//Farrell - 217116593
 router.post('/loginUser', async (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
@@ -49,7 +49,7 @@ router.post('/loginUser', async (req, res) => {
     }
 });
 
-//Farrell
+//Farrell 217116593
 router.post('/registerUser', async (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
@@ -79,7 +79,7 @@ router.post('/registerUser', async (req, res) => {
     }
 });
 
-//Andika
+//Andika 217116574
 router.post('/topup',async function(req, res){
     var username = req.body.username;
     var password = req.body.password;
@@ -171,7 +171,7 @@ router.post('/topup',async function(req, res){
     }
 });
 
-//Andika
+//Andika 217116574
 router.post('/pembayaran',async function(req, res){
     var kode = req.body.kodetopup;
     const token = req.header("x-auth-token");
@@ -268,7 +268,7 @@ router.post('/pembayaran',async function(req, res){
     } 
 });
 
-//Felix
+//Felix 217116594
 router.post('/addApiHit', async (req, res) => {
     var apihit = parseInt(req.body.apihit);
     const token = req.header("x-auth-token");
@@ -334,7 +334,7 @@ router.post('/addApiHit', async (req, res) => {
     }
 });
 
-//Felix
+//Felix 217116594
 router.post('/subscription', async (req, res) => {
     const token = req.header("x-auth-token");
 

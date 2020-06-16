@@ -24,7 +24,7 @@ const uploads = multer({
     storage: storage
 });
 
-//Farrell
+//Farrell 217116593
 router.get('/getHeadlines/:country',async (req,res)=>{
     var country = req.params.country;
     const token = req.header("x-auth-token");
@@ -134,7 +134,7 @@ router.get('/getHeadlines/:country',async (req,res)=>{
     }
 });
 
-//Farrell
+//Farrell 217116593
 router.get('/getHeadlines/:country/:category',async (req,res)=>{
     var country = req.params.country;
     var category = req.params.category;
@@ -244,7 +244,7 @@ router.get('/getHeadlines/:country/:category',async (req,res)=>{
 
 let tampungancomment={}
 
-///Andika
+///Andika 217116574
 router.get('/getcomment', async (req, res) => {
     var idtitle = req.query.id_title;
     const token = req.header("x-auth-token");
@@ -304,7 +304,7 @@ router.get('/getcomment', async (req, res) => {
     }
 });
 
-//Andika
+//Andika 217116574
 router.post('/comment', async (req, res) => {
     var title = req.query.titleberita;
     var komen = req.body.comment;
@@ -406,7 +406,7 @@ router.post('/comment', async (req, res) => {
     }
 });
 
-//albert
+//albert 217116570
 router.post('/insertNews', uploads.single("gambar"), async (req, res) => {
     var judul = req.body.judul;
     var deskripsi = req.body.deskripsi;
@@ -467,7 +467,7 @@ router.post('/insertNews', uploads.single("gambar"), async (req, res) => {
     
 });
 
-//albert
+//albert 217116570
 router.get('/getAuthorNews', async (req, res) => {
     const token = req.header("x-auth-token");
 
@@ -508,7 +508,7 @@ router.get('/getAuthorNews', async (req, res) => {
     }
 });
 
-//albert
+//albert 217116570
 router.delete('/deleteNews', async (req, res) => {
     var id_news = req.body.id_news;
     const token = req.header("x-auth-token");
@@ -558,7 +558,7 @@ router.delete('/deleteNews', async (req, res) => {
         });
     }
 });
-//albert
+//albert 217116570
 router.put('/updateNews', uploads.single("gambar"), async (req, res) => {
     var id_news = req.body.id_news;
     var judul = req.body.judul;
@@ -616,7 +616,7 @@ router.put('/updateNews', uploads.single("gambar"), async (req, res) => {
     }
 });
 
-//Felix
+//Felix 217116594
 router.get('/searchnews/:keyword',async (req,res)=>{
     var keyword = req.params.keyword;
     const token = req.header("x-auth-token");
@@ -737,7 +737,7 @@ router.get('/searchnews/:keyword',async (req,res)=>{
     }
 });
 
-//Felix
+//Felix 217116594
 router.get('/detailnews/:idtitle',async (req,res)=>{
     var id = parseInt(req.params.idtitle);
     const token = req.header("x-auth-token");

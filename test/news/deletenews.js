@@ -114,7 +114,7 @@ it('Berhasil delete berita', (done) => {
         .delete(endpoint)
         .set("x-auth-token",token)
         .send({
-            id_news: 5
+            id_news: 6
         })
         .end((err, res) => {
             res.should.have.status(200);
