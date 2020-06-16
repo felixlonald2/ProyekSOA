@@ -41,29 +41,29 @@ it('Token salah', (done) => {
         });
 }).timeout(10000);
 
-it('Berita yang dicari tidak ada', (done) => {
-    chai.request("http://localhost:3000")
-        .get(endpoint+"asd")
-        .set("x-auth-token",token)
-        .end((err, res) => {
-            res.should.have.status(404);
-            res.body.should.be.a('object');
-            res.body.should.have.property('status').eql(404);
-            res.body.should.have.property('message').eql('Berita yang dicari tidak ditemukan!');
-        done();
-        });
-}).timeout(10000);
+// it('Berita yang dicari tidak ada', (done) => {
+//     chai.request("http://localhost:3000")
+//         .get(endpoint+1)
+//         .set("x-auth-token",token)
+//         .end((err, res) => {
+//             res.should.have.status(404);
+//             res.body.should.be.a('object');
+//             res.body.should.have.property('status').eql(404);
+//             res.body.should.have.property('message').eql('Berita yang dicari tidak ditemukan!');
+//         done();
+//         });
+// }).timeout(50000);
 
-it('Berita berhasil dicari', (done) => {
-    chai.request("http://localhost:3000")
-        .get(endpoint)
-        .set("x-auth-token",token)
-        .end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
-            res.body.should.have.property('status').eql(200);
-            res.body.should.have.property('id_title_untuk_comment');
-        done();
-        });
-}).timeout(50000);
+// it('Berita berhasil dicari', (done) => {
+//     chai.request("http://localhost:3000")
+//         .get(endpoint)
+//         .set("x-auth-token",token)
+//         .end((err, res) => {
+//             res.should.have.status(200);
+//             res.body.should.be.a('object');
+//             res.body.should.have.property('status').eql(200);
+//             res.body.should.have.property('id_title_untuk_comment');
+//         done();
+//         });
+// }).timeout(50000);
 

@@ -418,12 +418,12 @@ router.post('/insertNews', uploads.single("gambar"), async (req, res) => {
 
     let user = {};
     if(!token){
-        res.status(401).send("Token not found");
+        return res.status(404).send("Token not found");
     }
     try{
         user = jwt.verify(token,"proyeksoa");
     }catch(err){
-        res.status(401).send("Token Invalid");
+        return res.status(401).send("Token Invalid");
     }
     if((new Date().getTime()/1000)-user.iat>3*86400){
         return res.status(400).send("Token expired");
@@ -434,7 +434,7 @@ router.post('/insertNews', uploads.single("gambar"), async (req, res) => {
         let query1= await db.executeQuery(`select id from berita order by 1 desc`);
         let author = user.username;
         if(query.rows.length <= 0){
-            if(author != "" && judul != "" && deskripsi != "" && isi != "" && id_negara != ""){
+            if(author != "" && judul != "" && deskripsi != "" && isi != "" && id_negara != "" && kategori !=""){
                 var id_news = query1.rows[0].id +1
                 let query= await db.executeQuery(`insert into berita values('${id_news}','${author}','${judul}','${deskripsi}','${isi}','${tanggal}','public/uploads/${req.file.filename}','${id_negara}','${kategori}')`);
                 return res.status(200).json({
@@ -457,7 +457,7 @@ router.post('/insertNews', uploads.single("gambar"), async (req, res) => {
         }
     }
     else{
-        return res.status(404).json({
+        return res.status(400).json({
             status: 400,
             message: 'Bukan Author!'
         });
@@ -471,7 +471,7 @@ router.get('/getAuthorNews', async (req, res) => {
 
     let user = {};
     if(!token){
-        res.status(401).send("Token not found");
+        res.status(404).send("Token not found");
     }
     try{
         user = jwt.verify(token,"proyeksoa");
@@ -487,7 +487,7 @@ router.get('/getAuthorNews', async (req, res) => {
         let query= await db.executeQuery(`select * from berita where author= '${author}'`);
         if(query.rows.length<=0){
             return res.status(404).json({
-                status: 400,
+                status: 404,
                 message: 'Tidak mempunyai berita !'
             });
         }
@@ -499,7 +499,7 @@ router.get('/getAuthorNews', async (req, res) => {
         }
     }
     else{
-        return res.status(404).json({
+        return res.status(400).json({
             status: 400,
             message: 'Bukan Author!'
         });
@@ -513,7 +513,7 @@ router.delete('/deleteNews', async (req, res) => {
 
     let user = {};
     if(!token){
-        res.status(401).send("Token not found");
+        res.status(404).send("Token not found");
     }
     try{
         user = jwt.verify(token,"proyeksoa");
@@ -543,14 +543,14 @@ router.delete('/deleteNews', async (req, res) => {
             }
         }
         else{
-            return res.status(404).json({
+            return res.status(400).json({
                 status: 400,
                 message: 'Bukan Author!'
             });
         }
     }
     else{
-        return res.status(404).json({
+        return res.status(400).json({
             status: 400,
             message: 'Field tidak boleh kosong!'
         });
@@ -569,7 +569,7 @@ router.put('/updateNews', uploads.single("gambar"), async (req, res) => {
 
     let user = {};
     if(!token){
-        res.status(401).send("Token not found");
+        res.status(404).send("Token not found");
     }
     try{
         user = jwt.verify(token,"proyeksoa");
@@ -599,14 +599,14 @@ router.put('/updateNews', uploads.single("gambar"), async (req, res) => {
             }
         }
         else{
-            return res.status(404).json({
+            return res.status(400).json({
                 status: 400,
                 message: 'Bukan Author!'
             });
         }
     }
     else{
-        return res.status(404).json({
+        return res.status(400).json({
             status: 400,
             message: 'Field tidak boleh kosong!'
         });
@@ -740,7 +740,7 @@ router.get('/detailnews/:idtitle',async (req,res)=>{
     const token = req.header("x-auth-token");
 
     if(!token){
-        return res.status(401).send("Token not found");
+        return res.status(404).send("Token not found");
     }
     try{
         user = jwt.verify(token,"proyeksoa");
@@ -763,7 +763,7 @@ router.get('/detailnews/:idtitle',async (req,res)=>{
             'method' : 'GET',
             'url' : 'https://newsapi.org/v2/top-headlines?q='+keyword+'&apiKey=dc49dba7bedd4a40afdad7b3638dc843'
         };
-        request(options, function(error,response){
+        request(options,function(error,response){
             if(error) throw new Error(error);
             var tmp = JSON.parse(response.body);            
             var tampunganberita=tmp.articles;

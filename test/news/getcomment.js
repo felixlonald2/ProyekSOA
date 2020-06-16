@@ -4,10 +4,9 @@ const chaiHttp= require('chai-http');
 chai.should(); //ASSERTION STYLE
 chai.use(chaiHttp);
 // npm run test-users
-const endpoint= '/api/users/topup';
+const endpoint= '/api/news/getcomment/';
 
 let token;
-
 before((done) => {
     chai.request("http://localhost:3000")
         .post('/api/users/loginUser')
@@ -23,12 +22,7 @@ before((done) => {
 
 it('Token tidak ada', (done) => {
     chai.request("http://localhost:3000")
-        .post(endpoint)
-        .send({
-            username: "lonald",
-            password: "asd",
-            nominal: 1
-        })
+        .get(endpoint+"14")
         .end((err, res) => {
             res.should.have.status(404);
             res.body.should.be.a('object');
@@ -40,13 +34,8 @@ it('Token tidak ada', (done) => {
 
 it('Token salah', (done) => {
     chai.request("http://localhost:3000")
-        .post(endpoint)
+        .get(endpoint+"14")
         .set("x-auth-token","kokokokoko")
-        .send({
-            username: "lonald",
-            password: "asd",
-            nominal: 15000
-        })
         .end((err, res) => {
             res.should.have.status(401);
             res.body.should.be.a('object');
@@ -56,39 +45,41 @@ it('Token salah', (done) => {
         });
 }).timeout(10000);
 
-it('Field kosong!', (done) => {
-    chai.request("http://localhost:3000")
-        .post(endpoint)
-        .set("x-auth-token",token)
-        .send({
-            username: "",
-            password: "",
-            nominal: ""
-        })
-        .end((err, res) => {
-            res.should.have.status(400);
-            res.body.should.be.a('object');
-            res.body.should.have.property('status').eql(400);
-            res.body.should.have.property('message').eql('FIELD TIDAK BOLEH KOSONG');
-        done();
-        });
-}).timeout(10000);
+// it('Field kosong!', (done) => {
+//     chai.request("http://localhost:3000")
+//         .get(endpoint+undefined)
+//         .set("x-auth-token",token)
+//         .end((err, res) => {
+//             res.should.have.status(400);
+//             res.body.should.be.a('object');
+//             res.body.should.have.property('status').eql(400);
+//             res.body.should.have.property('message').eql('FIELD TIDAK BOLEH KOSONG');
+//         done();
+//         });
+// }).timeout(10000);
 
-it('Username tidak ditemukan!', (done) => {
+it('Title berita tidak ditemukan', (done) => {
     chai.request("http://localhost:3000")
-        .post(endpoint)
+        .get(endpoint+55)
         .set("x-auth-token",token)
-        .send({
-            username: "lonal",
-            password: "asd",
-            nominal: 15000
-        })
         .end((err, res) => {
             res.should.have.status(404);
             res.body.should.be.a('object');
             res.body.should.have.property('status').eql(404);
-            res.body.should.have.property('message').eql('USER TIDAK DITEMUKAN');
+            res.body.should.have.property('message').eql('TITLE BERITA TIDAK DITEMUKAN');
         done();
         });
 }).timeout(10000);
 
+it('Berhasil menampilkan komen pada ID Title yang dimasukkan', (done) => {
+    chai.request("http://localhost:3000")
+        .get(endpoint+12)
+        .set("x-auth-token",token)
+        .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.be.a('object');
+            res.body.should.have.property('status').eql(200);
+            res.body.should.have.property('berita')
+        done();
+        });
+}).timeout(10000);
