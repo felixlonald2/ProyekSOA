@@ -12,8 +12,8 @@ before((done) => {
     chai.request("http://localhost:3000")
         .post('/api/users/loginUser')
         .send({
-            username: 'lonald',
-            password: 'asd' 
+            username: 'albert',
+            password: 'abe' 
         })
         .end((err, res) => {
             token= res.text;
@@ -34,9 +34,7 @@ it('Token tidak ada', (done) => {
     chai.request("http://localhost:3000")
         .post(endpoint)
         .send({
-            username: "lonald",
-            password: "alaasd",
-            nominal: 1
+            kodetopup: "TU001"
         })
         .end((err, res) => {
             res.should.have.status(404);
@@ -52,15 +50,13 @@ it('Token salah', (done) => {
         .post(endpoint)
         .set("x-auth-token","kokokokoko")
         .send({
-            username: "lonald",
-            password: "asd",
-            nominal: 15000
+            kodetopup: "TU001"
         })
         .end((err, res) => {
             res.should.have.status(401);
             res.body.should.be.a('object');
             res.body.should.have.property('status').eql(401);
-            res.body.should.have.property('message').eql('TOKEN INVALID');
+            res.body.should.have.property('message').eql('Token Invalid');
         done();
         });
 }).timeout(10000);
@@ -70,65 +66,14 @@ it('Field kosong!', (done) => {
         .post(endpoint)
         .set("x-auth-token",token)
         .send({
-            username: "",
-            password: "",
-            kode: ""
+            kodetopup: undefined
         })
         .end((err, res) => {
             res.should.have.status(400);
             res.body.should.be.a('object');
             res.body.should.have.property('status').eql(400);
-            res.body.should.have.property('message').eql('FIELD TIDAK BOLEH KOSONG');
+            res.body.should.have.property('message').eql('FIELD tidak boleh kosong!');
         done();
-        });
-}).timeout(10000);
-
-it('Username tidak ditemukan!', (done) => {
-    chai.request("http://localhost:3000")
-        .post(endpoint)
-        .set("x-auth-token",token)
-        .send({
-            username: "lonal",
-            password: "asd",
-            kode: "TU001"
-        })
-        .end((err, res) => {
-            res.should.have.status(404);
-            res.body.should.be.a('object');
-            res.body.should.have.property('status').eql(404);
-            res.body.should.have.property('message').eql('USER TIDAK DITEMUKAN');
-        done();
-        });
-}).timeout(10000);
-
-it('API HIT tidak cukup!', (done) => {
-    chai.request("http://localhost:3000")
-        .put('/api/users/update/lonald')
-        .send({
-            api_hit: -1
-        })
-        .end(() => {
-            chai.request("http://localhost:3000")
-            .post(endpoint)
-            .set("x-auth-token",token)
-            .send({
-                username: "lonald",
-                password: "asd",
-                kode: "TU001"
-            })
-            .end((err, res) => {
-                res.should.have.status(400);
-                res.body.should.be.a('object');
-                res.body.should.have.property('status').eql(400);
-                res.body.should.have.property('message').eql('API HIT TIDAK CUKUP');
-
-                chai.request("http://localhost:3000")
-                .put('/api/users/update/lonald')
-                .send({
-                    api_hit: 50
-                })
-                .end(done);
-            });
         });
 }).timeout(10000);
 
@@ -137,15 +82,13 @@ it('Tagihan tidak ditemukan!', (done) => {
         .post(endpoint)
         .set("x-auth-token",token)
         .send({
-            username: "albert",
-            password: "abe",
-            kode: "TU051"
+            kodetopup: "TU005"
         })
         .end((err, res) => {
             res.should.have.status(404);
             res.body.should.be.a('object');
             res.body.should.have.property('status').eql(404);
-            res.body.should.have.property('message').eql('TAGIHAN TIDAK DITEMUKAN');
+            res.body.should.have.property('message').eql('Tagihan not found');
         done();
         });
 }).timeout(10000);
@@ -155,16 +98,13 @@ it('Berhasil Membayar!', (done) => {
         .post(endpoint)
         .set("x-auth-token",token)
         .send({
-            username: "lonald",
-            password: "asd",
-            kodetopup: "TU001"
+            kodetopup: "TU002"
         })
         .end((err, res) => {
             res.should.have.status(200);
             res.body.should.be.a('object');
             res.body.should.have.property('status').eql(200);
-            res.body.should.have.property('user');
+            res.body.should.have.property('message');
         done();
         });
 }).timeout(10000);
-

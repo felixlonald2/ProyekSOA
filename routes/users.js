@@ -174,7 +174,7 @@ router.post('/topup',async function(req, res){
 //Andika
 router.post('/pembayaran',async function(req, res){
     var kode = req.body.kodetopup;
-    const token = req.body.xauthtoken;
+    const token = req.header("x-auth-token");
     
     let user = {};
     if(!token){
@@ -198,7 +198,7 @@ router.post('/pembayaran',async function(req, res){
             message: "Token EXPIRED"
         });
     }else{
-        if(kode==""||token==""){
+        if(!kode||token==""){
             res.status(400).json({
                 status: 400,
                 message: 'FIELD tidak boleh kosong!'

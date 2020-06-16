@@ -134,23 +134,23 @@ it('Field Kosong!', (done) => {
         });
 }).timeout(10000);
 
-// it('Berhasil update berita', (done) => {
-//     chai.request("http://localhost:3000")
-//         .put(endpoint)
-//         .set("x-auth-token",token)
-//         .send({
-//             id_news : 2,
-//             judul : "asd",
-//             deskripsi : "asd",
-//             isi : "asd",
-//             id_negara : "id",
-//             kategori : "health"
-//         })
-//         .end((err, res) => {
-//             res.should.have.status(200);
-//             res.body.should.be.a('object');
-//             res.body.should.have.property('status').eql(200);
-//             res.body.should.have.property('message').eql('Berhasil update berita !');
-//         done();
-//         });
-// }).timeout(10000);
+it('Berhasil update berita', (done) => {
+    chai.request("http://localhost:3000")
+        .put(endpoint)
+        .set("x-auth-token",token)
+        .send({
+            id_news : 2,
+            judul : "asd",
+            deskripsi : "asd",
+            isi : "asd",
+            id_negara : "id",
+            kategori : "health"
+        })
+        .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.be.a('object');
+            res.body.should.have.property('status').eql(200);
+            res.body.should.have.property('message').eql('Berhasil update berita !');
+        done();
+        });
+}).timeout(10000);

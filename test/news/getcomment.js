@@ -4,7 +4,7 @@ const chaiHttp= require('chai-http');
 chai.should(); //ASSERTION STYLE
 chai.use(chaiHttp);
 // npm run test-users
-const endpoint= '/api/news/getcomment/';
+const endpoint= '/api/news/getcomment';
 
 let token;
 before((done) => {
@@ -22,7 +22,7 @@ before((done) => {
 
 it('Token tidak ada', (done) => {
     chai.request("http://localhost:3000")
-        .get(endpoint+"14")
+        .get(endpoint+"?id_title=14")
         .end((err, res) => {
             res.should.have.status(404);
             res.body.should.be.a('object');
@@ -34,7 +34,7 @@ it('Token tidak ada', (done) => {
 
 it('Token salah', (done) => {
     chai.request("http://localhost:3000")
-        .get(endpoint+"14")
+        .get(endpoint+"?id_title=14")
         .set("x-auth-token","kokokokoko")
         .end((err, res) => {
             res.should.have.status(401);
@@ -45,22 +45,22 @@ it('Token salah', (done) => {
         });
 }).timeout(10000);
 
-// it('Field kosong!', (done) => {
-//     chai.request("http://localhost:3000")
-//         .get(endpoint+undefined)
-//         .set("x-auth-token",token)
-//         .end((err, res) => {
-//             res.should.have.status(400);
-//             res.body.should.be.a('object');
-//             res.body.should.have.property('status').eql(400);
-//             res.body.should.have.property('message').eql('FIELD TIDAK BOLEH KOSONG');
-//         done();
-//         });
-// }).timeout(10000);
+it('Field kosong!', (done) => {
+    chai.request("http://localhost:3000")
+        .get(endpoint)
+        .set("x-auth-token",token)
+        .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.be.a('object');
+            res.body.should.have.property('status').eql(400);
+            res.body.should.have.property('message').eql('FIELD TIDAK BOLEH KOSONG');
+        done();
+        });
+}).timeout(10000);
 
 it('Title berita tidak ditemukan', (done) => {
     chai.request("http://localhost:3000")
-        .get(endpoint+55)
+        .get(endpoint+"?id_title=60")
         .set("x-auth-token",token)
         .end((err, res) => {
             res.should.have.status(404);
@@ -73,7 +73,7 @@ it('Title berita tidak ditemukan', (done) => {
 
 it('Berhasil menampilkan komen pada ID Title yang dimasukkan', (done) => {
     chai.request("http://localhost:3000")
-        .get(endpoint+12)
+        .get(endpoint+"?id_title=14")
         .set("x-auth-token",token)
         .end((err, res) => {
             res.should.have.status(200);

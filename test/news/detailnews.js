@@ -4,7 +4,7 @@ const chaiHttp= require('chai-http');
 chai.should(); //ASSERTION STYLE
 chai.use(chaiHttp);
 // npm run test-users
-const endpoint= '/api/news/detailnews/12';
+const endpoint= '/api/news/detailnews';
 
 let token;
 before((done) => {
@@ -22,7 +22,7 @@ before((done) => {
 
 it('Token tidak ada', (done) => {
     chai.request("http://localhost:3000")
-        .get(endpoint)
+        .get(endpoint+"/12")
         .end((err, res) => {
             res.should.have.status(404);
             res.text.should.eql('Token not found')
@@ -32,7 +32,7 @@ it('Token tidak ada', (done) => {
 
 it('Token salah', (done) => {
     chai.request("http://localhost:3000")
-        .get(endpoint)
+        .get(endpoint+"/12")
         .set("x-auth-token","kokokokoko")
         .end((err, res) => {
             res.should.have.status(401);
@@ -41,29 +41,25 @@ it('Token salah', (done) => {
         });
 }).timeout(10000);
 
-// it('Berita yang dicari tidak ada', (done) => {
-//     chai.request("http://localhost:3000")
-//         .get(endpoint+1)
-//         .set("x-auth-token",token)
-//         .end((err, res) => {
-//             res.should.have.status(404);
-//             res.body.should.be.a('object');
-//             res.body.should.have.property('status').eql(404);
-//             res.body.should.have.property('message').eql('Berita yang dicari tidak ditemukan!');
-//         done();
-//         });
-// }).timeout(50000);
+it('Berita yang dicari tidak ada', (done) => {
+    chai.request("http://localhost:3000")
+        .get(endpoint+"/125")
+        .set("x-auth-token",token)
+        .end((err, res) => {
+            res.should.have.status(404);
+            res.text.should.eql('Berita yang dicari tidak ditemukan')
+        done();
+        });
+}).timeout(50000);
 
-// it('Berita berhasil dicari', (done) => {
-//     chai.request("http://localhost:3000")
-//         .get(endpoint)
-//         .set("x-auth-token",token)
-//         .end((err, res) => {
-//             res.should.have.status(200);
-//             res.body.should.be.a('object');
-//             res.body.should.have.property('status').eql(200);
-//             res.body.should.have.property('id_title_untuk_comment');
-//         done();
-//         });
-// }).timeout(50000);
+it('Berita berhasil dicari', (done) => {
+    chai.request("http://localhost:3000")
+        .get(endpoint+"/12")
+        .set("x-auth-token",token)
+        .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.be.a('object');
+        done();
+        });
+}).timeout(50000);
 

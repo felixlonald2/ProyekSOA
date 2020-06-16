@@ -245,8 +245,8 @@ router.get('/getHeadlines/:country/:category',async (req,res)=>{
 let tampungancomment={}
 
 ///Andika
-router.get('/getcomment/:id_title', async (req, res) => {
-    var idtitle = req.params.id_title;
+router.get('/getcomment', async (req, res) => {
+    var idtitle = req.query.id_title;
     const token = req.header("x-auth-token");
     let tampungan;
     let user = {};
@@ -270,7 +270,7 @@ router.get('/getcomment/:id_title', async (req, res) => {
             message: "TOKEN EXPIRED"
         }); 
     }else{
-        if(idtitle==""){
+        if(!idtitle){
             return res.status(400).json({
                 status: 400,
                 message: "FIELD TIDAK BOLEH KOSONG"
@@ -305,8 +305,8 @@ router.get('/getcomment/:id_title', async (req, res) => {
 });
 
 //Andika
-router.post('/comment/:titleberita', async (req, res) => {
-    var title = req.params.titleberita;
+router.post('/comment', async (req, res) => {
+    var title = req.query.titleberita;
     var komen = req.body.comment;
     const token = req.header("x-auth-token");
     var apihit;
@@ -334,7 +334,7 @@ router.post('/comment/:titleberita', async (req, res) => {
         }); 
     }else{
         var username = user.username;
-        if(komen==""||title==""){
+        if(!komen||!title){
             return res.status(400).json({
                 status: 400,
                 message: "FIELD TIDAK BOLEH KOSONG"
@@ -429,6 +429,8 @@ router.post('/insertNews', uploads.single("gambar"), async (req, res) => {
         return res.status(400).send("Token expired");
     }
 
+    var file = req.file ?req.file.filename:"default.png";
+
     if(user.status==1){ 
         let query= await db.executeQuery(`select * from berita where judul= '${judul}'`);
         let query1= await db.executeQuery(`select id from berita order by 1 desc`);
@@ -436,7 +438,7 @@ router.post('/insertNews', uploads.single("gambar"), async (req, res) => {
         if(query.rows.length <= 0){
             if(author != "" && judul != "" && deskripsi != "" && isi != "" && id_negara != "" && kategori !=""){
                 var id_news = query1.rows[0].id +1
-                let query= await db.executeQuery(`insert into berita values('${id_news}','${author}','${judul}','${deskripsi}','${isi}','${tanggal}','public/uploads/${req.file.filename}','${id_negara}','${kategori}')`);
+                let query= await db.executeQuery(`insert into berita values('${id_news}','${author}','${judul}','${deskripsi}','${isi}','${tanggal}','public/uploads/${file}','${id_negara}','${kategori}')`);
                 return res.status(200).json({
                     status: 200,
                     message: 'Berhasil Insert Berita'
@@ -566,6 +568,7 @@ router.put('/updateNews', uploads.single("gambar"), async (req, res) => {
     var id_negara = req.body.id_negara;
     
     const token = req.header("x-auth-token");
+    var file = req.file ?req.file.filename:"default.png";
 
     let user = {};
     if(!token){
@@ -591,7 +594,7 @@ router.put('/updateNews', uploads.single("gambar"), async (req, res) => {
                 });
             }
             else{
-                let query1= await db.executeQuery(`update berita set author='${author}',judul='${judul}',deskripsi='${deskripsi}',isi='${isi}',tanggal=to_timestamp(${Date.now()} / 1000.0),foto='public/uploads/${req.file.filename}',id_negara='${id_negara}' where id=${id_news}`);
+                let query1= await db.executeQuery(`update berita set author='${author}',judul='${judul}',deskripsi='${deskripsi}',isi='${isi}',tanggal=to_timestamp(${Date.now()} / 1000.0),foto='public/uploads/${file}',id_negara='${id_negara}' where id=${id_news}`);
                 return res.status(200).json({
                     status: 200,
                     message: 'Berhasil update berita !'
@@ -754,8 +757,12 @@ router.get('/detailnews/:idtitle',async (req,res)=>{
             select * from title where id = ${id}
         `);
 
-        var beritafilter = berita.rows; 
-        var judul = beritafilter[0].title;
+        if(berita.rows.length==0){
+            return res.status(404).send("Berita yang dicari tidak ditemukan")
+        }
+        else{
+            let beritafilter = berita.rows; 
+        let judul = beritafilter[0].title;
         var keyword = judul.substring(0,10);
         var temp = [];
 
@@ -768,65 +775,58 @@ router.get('/detailnews/:idtitle',async (req,res)=>{
             var tmp = JSON.parse(response.body);            
             var tampunganberita=tmp.articles;
 
-            if(tampunganberita.length==0){
-                return res.status(404).json({
-                    status: 404,
-                    message: 'Berita yang dicari tidak ditemukan!'
-                });
-            }
-            else{
-                for (let i = 0; i < tampunganberita.length; i++) {
-                    var tanggal = tampunganberita[i].publishedAt.substring(8,10);
-                    var bulanangka = tampunganberita[i].publishedAt.substring(5,7);
-                    var tahun = tampunganberita[i].publishedAt.substring(0,4);
-                    var bulan= "";
-                    if(bulanangka=="01"){
-                        bulan= "Januari"
-                    }
-                    else if(bulanangka=="02"){
-                        bulan="Februari"
-                    }
-                    else if(bulanangka=="03"){
-                        bulan="Maret"
-                    }
-                    else if(bulanangka=="04"){
-                        bulan="April"
-                    }
-                    else if(bulanangka=="05"){
-                        bulan="Mei"
-                    }
-                    else if(bulanangka=="06"){
-                        bulan="Juni"
-                    }
-                    else if(bulanangka=="07"){
-                        bulan="Juli"
-                    }
-                    else if(bulanangka=="08"){
-                        bulan="Agustus"
-                    }
-                    else if(bulanangka=="09"){
-                        bulan="September"
-                    }
-                    else if(bulanangka=="10"){
-                        bulan="Oktober"
-                    }
-                    else if(bulanangka=="11"){
-                        bulan="November"
-                    }
-                    else if(bulanangka=="12"){
-                        bulan="Desember"
-                    }
-                    const newstemp = {
-                        Judul_berita : tampunganberita[i].title,
-                        Author : tampunganberita[i].author,
-                        Publish : tanggal+" "+bulan+" "+tahun,
-                        Isi_berita : tampunganberita[i].content
-                    }
-                    temp.push(newstemp);
+            for (let i = 0; i < tampunganberita.length; i++) {
+                var tanggal = tampunganberita[i].publishedAt.substring(8,10);
+                var bulanangka = tampunganberita[i].publishedAt.substring(5,7);
+                var tahun = tampunganberita[i].publishedAt.substring(0,4);
+                var bulan= "";
+                if(bulanangka=="01"){
+                    bulan= "Januari"
                 }
-                return res.status(200).send(temp[0]);
+                else if(bulanangka=="02"){
+                    bulan="Februari"
+                }
+                else if(bulanangka=="03"){
+                    bulan="Maret"
+                }
+                else if(bulanangka=="04"){
+                    bulan="April"
+                }
+                else if(bulanangka=="05"){
+                    bulan="Mei"
+                }
+                else if(bulanangka=="06"){
+                    bulan="Juni"
+                }
+                else if(bulanangka=="07"){
+                    bulan="Juli"
+                }
+                else if(bulanangka=="08"){
+                    bulan="Agustus"
+                }
+                else if(bulanangka=="09"){
+                    bulan="September"
+                }
+                else if(bulanangka=="10"){
+                    bulan="Oktober"
+                }
+                else if(bulanangka=="11"){
+                    bulan="November"
+                }
+                else if(bulanangka=="12"){
+                    bulan="Desember"
+                }
+                const newstemp = {
+                    Judul_berita : tampunganberita[i].title,
+                    Author : tampunganberita[i].author,
+                    Publish : tanggal+" "+bulan+" "+tahun,
+                    Isi_berita : tampunganberita[i].content
+                }
+                temp.push(newstemp);
             }
+            return res.status(200).send(temp[0]);
         });
+        }
     }
 });
 

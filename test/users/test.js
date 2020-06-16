@@ -6,4 +6,4 @@ testLoader('/topup', '../users/topup');
 testLoader('/register', '../users/register');
 testLoader('/addapihit', '../users/addapihit');
 testLoader('/subscription', '../users/subscription');
-// testLoader('/pembayaran', '../users/pembayaran');
+testLoader('/pembayaran', '../users/pembayaran');

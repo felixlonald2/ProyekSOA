@@ -110,24 +110,45 @@ it('Bukan author!', (done) => {
         });
 }).timeout(10000);
 
-// it('Berhasil menambahkan berita', (done) => {
-//     chai.request("http://localhost:3000")
-//         .post(endpoint)
-//         .set("x-auth-token",token2)
-//         .send({
-//             judul : "asd",
-//             deskripsi : "asd",
-//             isi : "asd",
-//             id_negara : "id",
-//             kategori : "health"
-//         })
-//         .end((err, res) => {
-//             res.should.have.status(200);
-//             res.body.should.be.a('object');
-//             res.body.should.have.property('status').eql(200);
-//             res.body.should.have.property('message').eql('Berhasil Insert Berita');
-//         done();
-//         });
-// }).timeout(10000);
+it('Berhasil menambahkan berita', (done) => {
+    chai.request("http://localhost:3000")
+        .post(endpoint)
+        .set("x-auth-token",token2)
+        .send({
+            judul : "asddd",
+            deskripsi : "asd",
+            isi : "asd",
+            id_negara : "id",
+            kategori : "health"
+        })
+        .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.be.a('object');
+            res.body.should.have.property('status').eql(200);
+            res.body.should.have.property('message').eql('Berhasil Insert Berita');
+        done();
+        });
+}).timeout(10000);
+
+it('Berita sudah ada', (done) => {
+    chai.request("http://localhost:3000")
+        .post(endpoint)
+        .set("x-auth-token",token2)
+        .send({
+            judul : "asd",
+            deskripsi : "asd",
+            isi : "asd",
+            id_negara : "id",
+            kategori : "health"
+        })
+        .end((err, res) => {
+            res.should.have.status(400);
+            res.body.should.be.a('object');
+            res.body.should.have.property('status').eql(400);
+            res.body.should.have.property('message').eql('Berita sudah ada!');
+        done();
+        });
+}).timeout(10000);
+
 
 
