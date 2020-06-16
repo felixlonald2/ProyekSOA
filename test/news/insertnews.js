@@ -115,7 +115,7 @@ it('Berhasil menambahkan berita', (done) => {
         .post(endpoint)
         .set("x-auth-token",token2)
         .send({
-            judul : "asddd",
+            judul : "asdddd",
             deskripsi : "asd",
             isi : "asd",
             id_negara : "id",

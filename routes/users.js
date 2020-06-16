@@ -174,7 +174,7 @@ router.post('/topup',async function(req, res){
 //Andika 217116574
 router.post('/pembayaran',async function(req, res){
     var kode = req.body.kodetopup;
-    const token = req.header("x-auth-token");
+    const token = req.body.xauthtoken;
     
     let user = {};
     if(!token){
